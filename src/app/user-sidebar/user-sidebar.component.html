@@ -1,0 +1,57 @@
+<div class="sidebar-wrapper">
+  <div class="mainlogo">
+    <img src="assets/img/logo.png" style="width: 120px; height: 120px" />
+  </div>
+  <span class="logotext">
+    CENTRAL DELIVERY COORDINATION UNIT' PERFORMANCE MANAGEMENT SYSTEM
+  </span>
+  <ul class="nav">
+    <li *ngFor="let menuItem of menuItems" routerLinkActive="active">
+      <a
+        [routerLink]="[menuItem.path]"
+        style="display: flex; flex-direction: row"
+        id="{{ menuItem.id }}"
+        (click)="addAct($event.currentTarget)"
+      >
+        <img src="assets/img/icons/{{ menuItem.icon }}" alt="" class="me-3" />
+        <p
+          style="
+            font-family: 'Montserrat', sans-serif;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 14px;
+            text-transform: initial;
+          "
+        >
+          {{ menuItem.title }}
+        </p>
+        <i class="{{ menuItem.subclass }}" style="font-size: 10px"></i>
+      </a>
+
+      <div class="collapse" id="collapse">
+        <ul class="nav">
+          <li
+            routerlinkactive="active"
+            *ngFor="let Item of menuItem.array"
+            (click)="addActive($event)"
+          >
+            <a [routerLink]="[Item.path]">
+              <p
+                style="
+                  font-family: 'Montserrat', sans-serif;
+                  font-style: normal;
+                  font-weight: 500;
+                  font-size: 14px;
+                  text-transform: initial;
+                  margin-left: 4rem;
+                "
+              >
+                {{ Item.title }}
+              </p></a
+            >
+          </li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+</div>

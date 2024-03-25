@@ -1,0 +1,34 @@
+<div class="img login-col d-flex flex-column">
+    <div class="login-container">
+        <div class="h-100 d-flex justify-content-around flex-column">
+            <div class="logos text-center">
+                <img src="assets/logo/agile.png" alt="">
+                <a class="mx-4" href="https://statehouse.gov.ng/" target="_blank"><img src="assets/logo/coa.png" alt=""></a>
+                <a href="https://www.worldbank.org/en/home" target="_blank"><img src="assets/logo/wb.png" alt=""></a>
+            </div>
+            <form method="post" #loginForm="ngForm" (ngSubmit)="onLogin(loginForm.value)">
+                <h4 class="pt-5">Enter sign in credentials below</h4>
+                <div class="form-group my-5">
+                    <input type="text" name="email" class="form-control py-4 px-5" #email="ngModel" id="email" ngModel required  placeholder="Type your e-mail">
+                    <img src="assets/img/icons/email.svg" class="input-icon" alt="">
+                </div>
+                <div class="form-group mb-5">
+                    <input type="password" class="form-control py-4 px-5" placeholder="Type your password" id="password" #password="ngModel" name="password" ngModel required>
+                    <img src="assets/img/icons/password.svg" class="input-icon" alt="">
+                    <img src="assets/img/icons/eye.svg" class="eye cursor" *ngIf="inputType == 'text'" alt="" (click)="changeType('password')">
+                    <img src="assets/img/icons/slashed-eye.svg" class="eye cursor" *ngIf="inputType == 'password'" alt="" (click)="changeType('text')">
+                    <small class="text-primary">Forgot password ?</small>
+                </div>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-primary btn-block btn-lg">Sign In</button>
+                </div>
+            </form>
+            <div class="mt-5 d-flex justify-content-center">
+                <div class="d-flex align-items-center me-4">
+                    <h4>Powered by</h4>
+                </div>
+                <a href="https://seismicconsults.com/" target="_blank"><img src="assets/logo/seismic.png" alt=""></a>
+            </div>
+        </div>
+    </div>
+</div>

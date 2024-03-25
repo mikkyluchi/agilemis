@@ -1,0 +1,34 @@
+<div class="modal-header">
+  <h5 style="display: block" class="modal-title">Add new Deliverable</h5>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<form (ngSubmit)="create()" [formGroup]="mandateForm">
+  <div class="modal-body">
+    <div class="reg mt-4 mb-4" action="">
+      <div class="form-group" *ngIf="!data">
+        <label for="mdaId">Select Ministry</label>
+        <select name="mdaId" formControlName="mdaId" class="custom-select">
+          <option value="" disabled selected></option>
+          <option value="{{item.id}}" *ngFor="let item of mdas">{{item.name}}</option>
+        </select>
+        <div *ngIf="mandateFormData.mdaId.invalid && mandateFormData.mdaId.touched" class="error">
+          <p> <img src="assets/img/error.svg" width="0.9375rem" alt=""> &nbsp; Ministry is required.</p>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="name">Title</label>
+        <input type="text" class="form-control" placeholder="Initiaitive name" id="name" name="name"
+          formControlName="title">
+        <div *ngIf="mandateFormData.title.invalid && mandateFormData.title.touched" class="error">
+          <p> <img src="assets/img/error.svg" width="0.9375rem" alt=""> &nbsp; Initiaitive name is required.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" [disabled]="!mandateForm.valid" class="btn submit">Save</button>
+  </div>
+</form>

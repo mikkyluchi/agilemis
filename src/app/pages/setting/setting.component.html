@@ -1,0 +1,509 @@
+<div class="row" *ngIf="currentUserObj.roles[0].name == 'admin' || currentUserObj.roles[0].name == 'npcu'">
+  <div class="d-flex flex-row justify-content-end">
+    <button class="btn btn-outline-primary px-3 mx-2" (click)="openUserModal('')">Create User</button>
+    <button class="btn btn-outline-primary px-3 mx-2" (click)="openYearModal()">Create Year</button>
+    <button class="btn btn-outline-primary px-3 mx-2" (click)="openQuarterModal()">Create Quarter</button>
+   
+  </div>
+</div>
+
+<div id="helptabs" *ngIf="currentUserObj.roles[0].name == 'admin' || currentUserObj.roles[0].name == 'npcu'">
+  <ul class="nav nav-tabs" id="user-nav-tabs">
+    <li role="presentation" class="active">
+      <a class="#c1" (click)="showUserIcon()">All System Users</a>
+    </li>
+    <li role="presentation">
+      <a class="#c2" (click)="showRoleIcon()">Roles</a>
+    </li>
+    <li role="presentation">
+      <a class="#c3" (click)="disableEmail()">Profile Settings</a>
+    </li>
+    <li role="presentation">
+      <a class="#c4" (click)="disableEmail()">Years</a>
+    </li>
+    <li role="presentation">
+      <a class="#c5" (click)="disableEmail()">Quarters</a>
+    </li>
+    <li role="presentation">
+      <a class="#c6" (click)="disableEmail()">States</a>
+    </li>
+   
+  </ul>
+</div>
+
+<!-- All system users -->
+<div id="content" *ngIf="currentUserObj.roles[0].name == 'admin' || currentUserObj.roles[0].name == 'npcu'">
+  <div id="content1">
+    <form class="flex-column">
+      <div class="row">
+        <div class="col-lg-6 form-group">
+          <label>Search name <span class="text-danger">*</span></label>
+          <input type="text" placeholder="" name="query" [(ngModel)]="query" class="form-control">
+        </div>
+        <div class="col-lg-6 form-group"><button class="btn btn-success px-4" (click)="searchUser()" [disabled]="query==''" type="submit">Search</button></div>
+        
+      </div>
+      
+    </form>
+    <table class="table table-borderless" id="settingstable" *ngIf="alluserdata">
+      <thead>
+        <tr>
+          <th><input type="checkbox" value="Bike" /></th>
+          <th>S/N</th>
+          <th>Name</th>
+          <th>Role</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>State</th>
+          <th>LGA</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of alluserdata | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
+          <td><input type="checkbox" value="Bike" /></td>
+          <td>{{ i + 1 }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.roles[0]?.name }}</td>
+          <td>{{ item.email }}</td>
+          <td>{{ item.phone_number }}</td>
+          <td>{{ item.lga?.state?.title }}</td>
+          <td>{{ item.lga?.title }}</td>
+          <td>
+            <!--<a><img src="assets/img/icons/more.svg" alt=""></a>-->
+            <div class="btn-group ddl-actions">
+              <button
+                type="button"
+                class="btn-actions dropdown-toggle dropdown-toggle-split"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <img src="assets/img/icons/more.svg" alt="" />
+              </button>
+              <div class="dropdown-menu">
+                <a
+                  class="dropdown-item"
+                  (click)="openUserModal(item)"
+                  >Edit</a
+                >
+                <a
+                  class="dropdown-item"
+                  data-toggle="modal"
+                  data-target="#deluserModal"
+                  (click)="saveDelVal(item.id)"
+                  >Delete</a
+                >
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p-paginator *ngIf="userMetaData && query == ''" [rows]="userMetaData?.per_page" [totalRecords]="userMetaData?.total" (onPageChange)="paginate($event)"></p-paginator>
+    <!-- <pagination-controls (pageChange)="getUserByPage((page = $event))">
+    </pagination-controls> -->
+    <!-- <pagination-controls (pageChange)="getUserByPage((page = $event))"> -->
+    <!-- </pagination-controls> -->
+  </div>
+
+  <!-- Roles & Permission -->
+  <div id="content2">
+    <table class="table table-borderless">
+      <thead>
+        <tr>
+          <!-- <td><input type="checkbox" /></td> -->
+          <td class="font-weight-bold">S/N</td>
+          <td class="font-weight-bold">Role</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of allroles; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ item.name }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="content3">
+    <div class="loginsettings">
+      <div class="head">Profile Setting</div>
+      <div class="body">
+        <form
+          [formGroup]="loginSet"
+          class="flex-column"
+          (ngSubmit)="loginSetting()"
+        >
+          <label for="">User name</label>
+          <input
+            type="text"
+            placeholder="OSGF Admin"
+            class="form-control"
+            formControlName="name"
+          />
+
+          <div class="mb-3">
+            <label for="NewPassword" class="form-label">New Password</label>
+            <input
+              type="text"
+              class="form-control"
+              id="NewPassword"
+              placeholder="*******"
+              formControlName="password"
+            />
+            <span
+              class="password_error"
+              style="font-size: 0.8rem"
+              *ngIf="loginSet.invalid"
+              >Note: Password should be greater than 6</span
+            >
+          </div>
+
+          <div class="mb-3">
+            <label for="ReNewPassword" class="form-label"
+              >Re-Enter Password</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="ReNewPassword"
+              placeholder="*******"
+              formControlName="rePassword"
+            />
+          </div>
+
+          <label for="">Email</label>
+          <input
+            type="text"
+            placeholder="Admin@sgfpms.ng"
+            class="form-control"
+            formControlName="email"
+          />
+          <button type="submit" class="btn btn-sm" [disabled]="!loginSet.valid">
+            Save
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div id="content4">
+    <table class="table table-borderless" id="settingstable" *ngIf="years">
+      <thead>
+        <tr>
+          <th><input type="checkbox" value="Bike" /></th>
+          <th>S/N</th>
+          <th>Title</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of years; let i = index">
+          <td><input type="checkbox" value="Bike" /></td>
+          <td>{{ i + 1 }}</td>
+          <td>{{ item.title }}</td>
+          <td>
+            <!--<a><img src="assets/img/icons/more.svg" alt=""></a>-->
+            <div class="btn-group ddl-actions">
+              <button
+                type="button"
+                class="btn-actions dropdown-toggle dropdown-toggle-split"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <img src="assets/img/icons/more.svg" alt="" />
+              </button>
+              <div class="dropdown-menu">
+                <!-- <a
+                  class="dropdown-item"
+                  (click)="openUserModal(item)"
+                  >Edit</a
+                > -->
+                <a
+                  class="dropdown-item"
+                  data-toggle="modal"
+                  data-target="#deluserModalll"
+                  (click)="projectIdd = item.id"
+                  >Delete</a
+                >
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+  </div>
+  <div id="content5">
+    <table class="table table-borderless" id="settingstable" *ngIf="quarterss">
+      <thead>
+        <tr>
+          <th><input type="checkbox" value="Bike" /></th>
+          <th>S/N</th>
+          <th>Title</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of quarterss; let i = index">
+          <td><input type="checkbox" value="Bike" /></td>
+          <td>{{ i + 1 }}</td>
+          <td>{{ item.title }}</td>
+          <td>
+            <!--<a><img src="assets/img/icons/more.svg" alt=""></a>-->
+            <div class="btn-group ddl-actions">
+              <button
+                type="button"
+                class="btn-actions dropdown-toggle dropdown-toggle-split"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <img src="assets/img/icons/more.svg" alt="" />
+              </button>
+              <div class="dropdown-menu">
+                <!-- <a
+                  class="dropdown-item"
+                  (click)="openUserModal(item)"
+                  >Edit</a
+                > -->
+                <a
+                  class="dropdown-item"
+                  data-toggle="modal"
+                  data-target="#deluserModall"
+                  (click)="projectId = item.id"
+                  >Delete</a
+                >
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+  </div>
+  <div id="content6">
+    <table class="table table-borderless" id="statestable" *ngIf="nigerianstates">
+      <thead>
+        <tr>
+          <th><input type="checkbox" value="Bike" /></th>
+          <th>S/N</th>
+          <th>Title</th>
+          <th>state</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of nigerianstates; let i = index">
+          <td><input type="checkbox" value="Bike" /></td>
+          <td>{{ i + 1 }}</td>
+          <td>{{ item.title }}</td>
+          <td><span *ngIf="item.enabled == '0'">Disabled</span><span *ngIf="item.enabled == '1'">Enabled</span></td>
+          <td>
+            <!--<a><img src="assets/img/icons/more.svg" alt=""></a>-->
+            <div class="btn-group ddl-actions">
+              <button
+                type="button"
+                class="btn-actions dropdown-toggle dropdown-toggle-split"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <img src="assets/img/icons/more.svg" alt="" />
+              </button>
+              <div class="dropdown-menu">
+                <a
+                  class="dropdown-item"
+                  data-toggle="modal"
+                  data-target="#enableStateModal"
+                  (click)="projectId = item.id; statestatus = 1"
+                  >Enable</a
+                >
+                <a
+                  class="dropdown-item"
+                  data-toggle="modal"
+                  data-target="#enableStateModal"
+                  (click)="projectId = item.id; statestatus = 0"
+                  >Disable</a
+                >
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+  </div>
+</div>
+
+<div class="loginsettings" *ngIf="currentUserObj.roles[0].name != 'admin'">
+  <div class="head">Profile Setting</div>
+  <div class="body">
+    <form
+      [formGroup]="loginSet"
+      class="flex-column"
+      (ngSubmit)="loginSetting()"
+    >
+      <label for="">User name</label>
+      <input
+        type="text"
+        placeholder="OSGF Admin"
+        class="form-control"
+        formControlName="name"
+      />
+
+      <div class="mb-3">
+        <label for="NewPassword" class="form-label">New Password</label>
+        <input
+          type="text"
+          class="form-control"
+          id="NewPassword"
+          placeholder="*******"
+          formControlName="password"
+        />
+        <span
+          class="password_error"
+          style="font-size: 0.8rem"
+          *ngIf="loginSet.invalid"
+          >Note: Password should be greater than 6</span
+        >
+      </div>
+
+      <div class="mb-3">
+        <label for="ReNewPassword" class="form-label"
+          >Re-Enter Password</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          id="ReNewPassword"
+          placeholder="*******"
+          formControlName="rePassword"
+        />
+      </div>
+
+      <label for="">Email</label>
+      <input
+        type="text"
+        placeholder="Admin@sgfpms.ng"
+        class="form-control"
+        formControlName="email"
+      />
+      <button type="submit" class="btn btn-sm" [disabled]="!loginSet.valid">
+        Save
+      </button>
+    </form>
+  </div>
+</div>
+
+<!--Delete Confirmation modal-->
+<div
+  class="modal fade"
+  id="deluserModalll"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Delete Year</h5>
+
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure, you want to delete this item.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-success" (click)="delUserrr()">
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  id="deluserModall"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Delete Quarter</h5>
+
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure, you want to delete this item.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-success" (click)="delUserr()">
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="enableStateModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle"><span *ngIf="statestatus === 0">Disable</span><span *ngIf="statestatus === 1">Enable</span> State</h5>
+
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure, you want to <span *ngIf="statestatus === 0">Disable</span><span *ngIf="statestatus === 1">Enable</span> this state.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-success" (click)="enableState()">
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

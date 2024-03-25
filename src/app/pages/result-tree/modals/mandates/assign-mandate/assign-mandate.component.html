@@ -1,0 +1,54 @@
+<div class="modal-header">
+  <h5 style="display: block" class="modal-title">Assign Deliverables</h5>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<!-- <form (ngSubmit)="create()" [formGroup]="mandateForm"> -->
+<div class="modal-body">
+  <div class="reg mt-4 mb-4" action="">
+    <div class="form-group" *ngIf="!data">
+      <label for="mdaId">Select Ministry</label>
+      <select name="mdaId" formControlName="mdaId" class="custom-select">
+        <option value="" disabled selected></option>
+        <option value="{{item.id}}" *ngFor="let item of mdas">{{item.name}}</option>
+      </select>
+      <div *ngIf="mandateFormData.mdaId.invalid && mandateFormData.mdaId.touched" class="error">
+        <p> <img src="assets/img/error.svg" width="0.9375rem" alt=""> &nbsp; Ministry is required.</p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <!-- <label for="name">Title</label> -->
+      <input type="text" class="form-control" placeholder="Search for Deliverable" id="name" name="name" #input>
+
+    </div>
+
+    <div>
+      <p class="text-center mt-3 mx-2" *ngIf="checking">
+        <small style="font-size: 11px">
+          <i>
+            Searching....</i></small>
+      </p>
+      <p class="text-center mt-3 mx-2" *ngIf="availMandates.length > 0">
+        <small style="font-size: 11px">Tap to assign Deliverable</small>
+      </p>
+
+      <div (click)="assign(item.id)" class="card p-2 my-3 cursor" *ngFor="let item of availMandates">
+        <div class="row">
+          <div class="col  col-md-12">
+            <p style="font-size: 13px">
+
+              {{item.title}}
+            </p>
+          </div>
+          <!-- <div class="col col-md-3"> <a href="">Assign</a></div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="submit" [disabled]="!mandateForm.valid" class="btn submit">Save</button>
+</div>
+<!-- </form> -->

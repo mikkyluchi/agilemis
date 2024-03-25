@@ -1,0 +1,42 @@
+.login-col{
+    height: 100vh;
+    overflow-y: hidden;
+}
+
+.login-container{
+    height: 80vh;
+    width: 40%;
+    margin: auto;
+    min-width: 300px;
+}
+
+.form-control{
+    border: 1px solid#436AB5;
+    border-radius: 0px;
+    font-size: 18px;
+    background: transparent;
+}
+
+.form-group .input-icon{
+    position: absolute;
+    top: 27px;
+    left: 15px;
+}
+.form-group .eye{
+    position: absolute;
+    top: 27px;
+    right: 15px;
+}
+
+.img{
+    background-image: url(/assets/login-image.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* @media screen and(max-width: 992px) {
+    .login-container{
+        min
+    }
+} */

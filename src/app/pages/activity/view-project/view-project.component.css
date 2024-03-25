@@ -1,0 +1,206 @@
+.container-header {
+  border-bottom: 0.0625rem solid #D9E7C8;
+}
+
+.portfolio-menu{
+text-align:center;
+}
+.portfolio-menu ul li{
+display:inline-block;
+margin:0;
+list-style:none;
+padding:10px 15px;
+cursor:pointer;
+-webkit-transition:all 05s ease;
+-moz-transition:all 05s ease;
+-ms-transition:all 05s ease;
+-o-transition:all 05s ease;
+transition:all .5s ease;
+}
+
+.portfolio-item{
+/*width:100%;*/
+}
+.portfolio-item .item{
+/*width:303px;*/
+float:left;
+margin-bottom:10px;
+}
+
+.list-group-item{
+  border-radius: 0px;
+  border-color: #02E4C050;
+  border-left: none;
+  border-right: none;
+
+}
+.list-group-item:last-child{
+    border-bottom: none;
+}
+
+.dot{
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+
+}
+
+.dot.positive{
+    background-color: #02E4C0;
+}
+.dot.negative{
+    background-color: #F39200;
+}
+
+.radius {
+  border-radius: 10px;
+}
+
+.radius-5 {
+  border-radius: 5px;
+}
+
+.background {
+  background: var(--background);
+}
+
+.bkg-success {
+  background: var(--primary) !important;
+}
+
+.bkg-tertiary {
+  background: #05817a !important;
+}
+
+.bt-success {
+  background: #039f9647 !important;
+  border: none;
+}
+
+.bt-success-light {
+  background: #039f9666 !important;
+  border: none;
+}
+.bt-success:hover {
+  background: #039f9660;
+  border: none;
+}
+
+.txt-success {
+  color: var(--primary) !important;
+}
+.bkg-secondary {
+  background: var(--secondary) !important;
+}
+
+.txt-secondary {
+  color: var(--secondary) !important;
+}
+
+.dot-outline {
+  display: inline-block;
+  border-radius: 50%;
+  border: 1px solid #d9e7c8;
+  padding: 2px;
+  height: 10px;
+  width: 10px;
+}
+
+.dot {
+  display: inline-block;
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+}
+
+.shadow {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+.dropdown .arrow {
+  display: none;
+}
+.dropdown .dropdown-menu {
+  max-width: 100%;
+  background: var(--background);
+}
+.dropdown .dropdown-menu a {
+  color: #d9e7c8;
+  padding: 10px 15px;
+}
+
+.dropdown .dropdown-menu a:hover {
+  background: #066d67;
+}
+
+.texture-bkg {
+  background: var(--background);
+  color: #d9e7c8;
+}
+
+table,
+tr,
+td,
+th {
+  border: 1px solid #066d67 !important;
+}
+
+@media screen and(min-width: 1400px) {
+  .wrapper {
+    width: 90%;
+    margin-right: auto;
+    margin-left: auto;
+  }
+}
+
+.linearguageWrapper {
+  width: 100%;
+  padding: 0.3125rem 0rem;
+}
+.linearguageWrapper small {
+    font-size: 0.875rem;
+}
+
+.linearguageWrapper .traffic {
+    height: 0.75rem;
+    width: 100%;
+    background-image: url(/assets/stoplight.jpg);
+    background-size: cover;
+    border-radius: 0.25rem;
+}
+
+.linearguageWrapper span.target {
+    margin-top: 0.9375rem;
+    margin-right: 0rem;
+    float: right;
+    font-size: 0.6875rem;
+}
+
+.linearguageWrapper span.base {
+    margin-top: 0.9375rem;
+    margin-left: 0rem;
+    position: absolute;
+    font-size: 0.6875rem;
+}
+
+.linearguageWrapper .tick {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    background: gainsboro;
+    transform: translateY(-0.3rem);
+    position: relative;
+    border-radius: 100%;
+}
+
+.linearguageWrapper .tick span {
+    display: block;
+    float: right;
+    margin-right: -0.9375rem;
+    margin-top: -1.25rem;
+}

@@ -1,0 +1,23 @@
+<div class="modal-header">
+  <h5 style="display: block" class="modal-title">Add Cross-Cutting Issue Output</h5>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<form (ngSubmit)="create()" [formGroup]="mandateForm">
+  <div class="modal-body">
+    <div class="reg mt-4 mb-4" action="">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" placeholder="Output name" id="title" name="title"
+          formControlName="title">
+        <div *ngIf="mandateFormData.title.invalid && mandateFormData.title.touched" class="error">
+          <p> <img src="assets/img/error.svg" width="0.9375rem" alt=""> &nbsp; Initiaitive name is required.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" [disabled]="!mandateForm.valid" class="btn submit">Save</button>
+  </div>
+</form>

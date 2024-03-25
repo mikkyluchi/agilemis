@@ -1,0 +1,524 @@
+<div class="container px-4 px-lg-0 py-4 py-lg-5">
+
+    <div class="row mb-4 justify-content-end">
+        <div class="col-lg-8 row justify-content-end">
+          <!-- <div class="form-group col-2">
+            <select name="state_id" id="state_id" class="form-select form-select-sm" [(ngModel)]="selectedYear">
+              <option value="" selected>- Select Year -</option>
+              <option [value]="item" *ngFor="let item of years">{{item}}</option>
+            </select>
+          </div> -->
+          <div class="form-group col-3" *ngIf="currentUserObj.roles[0].name == 'admin'">
+            <select name="state_id" id="state_id" class="form-select form-select-sm" [(ngModel)]="state_id">
+              <option value="" selected>- Select State -</option>
+              <option [value]="item.id" *ngFor="let item of states">{{item.title}}</option>
+            </select>
+          </div>
+          <div class="form-group col-5">
+            <select name="sub_component_id" id="sub_component_id" class="form-select form-select-sm"
+              [(ngModel)]="sub_component_id">
+              <option value="" selected>- Select Sub-Component -</option>
+              <option [value]="item.id" *ngFor="let item of subComponents">{{item.title}}</option>
+            </select>
+          </div>
+          <div class="col-2">
+            <div class="d-grid gap-2">
+              <button class="btn btn-sm blue-btn px-3 my-0" (click)="getDashboardSummaryOne()">Apply Filter</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="card green-card card-stats py-4">
+            <div class="card-body card-align">
+              <div class="d-flex">
+                <span class="card-number mb-1 ms-1">{{stats?.total_projects}}</span>
+                <div class="pt-2 ms-3" style="line-height: 1; font-size:x-small;">
+                  <small class="text-success"><i class="fa fa-arrow-up"></i> 25%</small><br>
+                  <small>vs last 30 days</small>
+                </div>
+              </div>
+              <span class="card-text mb-1">Total Projects</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="card green-card card-stats py-4">
+            <div class="card-body card-align">
+              <div class="d-flex">
+                <span class="card-number blue-txt mb-1 ms-1">{{stats?.on_track}}</span>
+                <div class="pt-2 ms-3" style="line-height: 1; font-size:x-small;">
+                  <small class="blue-txt"><i class="fa fa-arrow-up"></i> 25%</small><br>
+                  <small>vs last 30 days</small>
+                </div>
+              </div>
+              <span class="card-text mb-1">Not Started</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="card green-card card-stats py-4">
+            <div class="card-body card-align">
+              <div class="d-flex">
+                <span class="card-number mb-1 ms-1">{{stats?.in_progress}}</span>
+                <div class="pt-2 ms-3" style="line-height: 1; font-size:x-small;">
+                  <small class="text-success"><i class="fa fa-arrow-up"></i> 25%</small><br>
+                  <small>vs last 30 days</small>
+                </div>
+              </div>
+              <span class="card-text mb-1">In Progress</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="card green-card card-stats py-4">
+            <div class="card-body card-align">
+              <div class="d-flex">
+                <span class="card-number mb-1 ms-1 red-txt">{{stats?.below_target}}</span>
+                <div class="pt-2 ms-3" style="line-height: 1; font-size:x-small;">
+                  <small class="red-txt"><i class="fa fa-arrow-up"></i> 25%</small><br>
+                  <small>vs last 30 days</small>
+                </div>
+              </div>
+              <span class="card-text mb-1">Completed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-12 py-0">
+          <div class="card py-0">
+            <div class="row">
+              <div class="col-lg-3 col-md-6 col-sm-6 py-0">
+                <div class="indicator card-stats py-3">
+                  <div class="card-body card-align">
+                    <div class="d-flex">
+                      <span class="card-number mb-1 ms-1">{{statss?.data?.beneficiarycount}}</span>
+                      <div class="pt-2 ms-3" style="line-height: 1; font-size:x-small;">
+                        <small class="text-success"><i class="fa fa-arrow-up"></i> &nbsp;</small><br>
+                        <small>&nbsp;</small>
+                      </div>
+                    </div>
+                    <span class="card-text mb-1">Total Beneficiaries</span>
+                  </div>
+                </div>
+              </div> 
+              <!-- <div class="col-lg-3 col-md-6 col-sm-6 py-0">
+                <div class="indicator card-stats py-3">
+                  <div class="card-body card-align">
+                    <div class="d-flex">
+                      <span class="card-number mb-1 ms-1">{{outputStats?.not_started}}</span>
+                      <div class="pt-2 ms-3" style="line-height: 1; font-size:x-small;">
+                        <small class="text-success"><i class="fa fa-arrow-up"></i> 25%</small><br>
+                        <small>vs last 30 days</small>
+                      </div>
+                    </div>
+                    <span class="card-text mb-1">Below Target</span>
+                  </div>
+                </div>
+              </div> -->
+              <!-- <div class="col-lg-3 col-md-6 col-sm-6 py-0">
+                <div class="indicatorcard-stats py-3">
+                  <div class="card-body card-align">
+                    <div class="d-flex">
+                      <span class="card-number blue-txt mb-1 ms-1">{{outputStats?.in_progress}}</span>
+                      <div class="pt-2 ms-3" style="line-height: 1; font-size:x-small;">
+                        <small class="blue-txt"><i class="fa fa-arrow-up"></i> 25%</small><br>
+                        <small>vs last 30 days</small>
+                      </div>
+                    </div>
+                    <span class="card-text mb-1">In Progress</span>
+                  </div>
+                </div>
+              </div> -->
+              <!-- <div class="col-lg-3 col-md-6 col-sm-6 py-0">
+                <div class="indicator card-stats py-3">
+                  <div class="card-body card-align">
+                    <div class="d-flex">
+                      <span class="card-number mb-1 ms-1 red-txt">{{outputStats?.completed}}</span>
+                      <div class="pt-2 ms-3" style="line-height: 1; font-size:x-small;">
+                        <small class="red-txt"><i class="fa fa-arrow-up"></i> 25%</small><br>
+                        <small>vs last 30 days</small>
+                      </div>
+                    </div>
+                    <span class="card-text mb-1">On Target</span>
+                  </div>
+                </div>
+              </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="row mb-4 justify-content-end">
+        <div class="col-lg-8 row justify-content-end">
+          <div class="form-group col-2">
+            <select name="state_id" id="state_id" class="form-select form-select-sm" [(ngModel)]="selectedYear">
+              <option value="" selected>- Select Year -</option>
+              <option [value]="item.id" *ngFor="let item of years">{{item.title}}</option>
+            </select>
+          </div>
+          <div class="form-group col-2">
+            <select name="state_id" id="state_id" class="form-select form-select-sm" [(ngModel)]="selectedQuarter">
+              <option value="" selected>- Select Quarter -</option>
+              <option [value]="item.id" *ngFor="let item of quarters">{{item.title}}</option>
+            </select>
+          </div>
+          <div class="form-group col-3" *ngIf="currentUserObj.roles[0].name == 'admin'  || currentUserObj.roles[0].name == 'npcu'">
+            <select name="state_id" id="state_id" class="form-select form-select-sm" [(ngModel)]="state_id">
+              <option value="" selected>- Select State -</option>
+              <option [value]="item.id" *ngFor="let item of states">{{item.title}}</option>
+            </select>
+          </div>
+          <div class="form-group col-5">
+            <select name="sub_component_id" id="sub_component_id" class="form-select form-select-sm"
+              [(ngModel)]="sub_component_id">
+              <option value="" selected>- Select Sub-Component -</option>
+              <option [value]="item.id" *ngFor="let item of subComponents">{{item.title}}</option>
+            </select>
+          </div>
+          <div class="col-2">
+            <div class="d-grid gap-2">
+              <button class="btn btn-sm blue-btn px-3 my-0" (click)="getAllStats()">Apply Filter</button>
+            </div>
+          </div>
+        </div>
+      </div> -->
+      
+      <div class="row sec-row">
+        <!-- <div class="row sec-row" *ngIf="currentUserObj.roles[0].name == 'admin' || currentUserObj.roles[0].name == 'npcu' || currentUserObj.roles[0].name == 'state'"> -->
+        <div class="col-12">
+          <div class="card p-4">
+            <div class="d-flex justify-content-between mb-4">
+              <p class="mb-0">PDO Indicator</p>
+              <div>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                  <button type="button" class="btn btn-outline-primary btn-sm"
+                    [ngClass]="{'blue-btn': currentReport == 'indicator'}"
+                    (click)="getPDOStats(); currentReport = 'indicator'">PDO indicator</button>
+                  <button type="button" class="btn btn-outline-primary btn-sm"
+                    [ngClass]="{'blue-btn': currentReport == 'sub-indicator'}"
+                    (click)="getSubPDOStats(); currentReport = 'sub-indicator'">Sub PDO indicator</button>
+                </div>
+              </div>
+            </div>
+            <!-- <canvas id="stackbudget" width="764" height="355"></canvas> -->
+            <highcharts-chart [Highcharts]="highcharts" [options]="pdoChartsOptions"
+              style="width: 100%; height: 400px; display: block; overflow-x: auto;">
+            </highcharts-chart>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-4 justify-content-end">
+        <div class="col-lg-8 row justify-content-end">
+          <div class="form-group col-2">
+            <select name="state_id" id="state_id" class="form-select form-select-sm" [(ngModel)]="selectedYear">
+              <option value="" selected>- Select Year -</option>
+              <option [value]="item.id" *ngFor="let item of years">{{item.title}}</option>
+            </select>
+          </div>
+          <div class="form-group col-2">
+            <select name="state_id" id="state_id" class="form-select form-select-sm" [(ngModel)]="selectedQuarter">
+              <option value="" selected>- Select Quarter -</option>
+              <option [value]="item.id" *ngFor="let item of quarters">{{item.title}}</option>
+            </select>
+          </div>
+          <div class="form-group col-3" *ngIf="currentUserObj.roles[0].name == 'admin'  || currentUserObj.roles[0].name == 'npcu'">
+            <select name="state_id" id="state_id" class="form-select form-select-sm" [(ngModel)]="state_id">
+              <option value="" selected>- Select State -</option>
+              <option [value]="item.id" *ngFor="let item of states">{{item.title}}</option>
+            </select>
+          </div>
+          <!-- <div class="form-group col-5">
+            <select name="sub_component_id" id="sub_component_id" class="form-select form-select-sm"
+              [(ngModel)]="sub_component_id">
+              <option value="" selected>- Select PDO -</option>
+              <option [value]="item.id" *ngFor="let item of indicators">{{item.title}}</option>
+            </select>
+          </div> -->
+          <div class="col-2">
+            <div class="d-grid gap-2">
+              <button class="btn btn-sm blue-btn px-3 my-0" (click)="getPDOStats()">Apply Filter</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row sec-row" *ngIf="currentUserObj.roles[0].name == 'admin'  || currentUserObj.roles[0].name == 'npcu'">
+        <!-- <div class="row sec-row" *ngIf="currentUserObj.roles[0].name == 'admin' || currentUserObj.roles[0].name == 'npcu' || currentUserObj.roles[0].name == 'state'"> -->
+        <div class="col-12">
+          <div class="card p-4">
+            <div class="d-flex justify-content-between mb-4">
+              <p class="mb-0">PDO Indicator(States)</p>
+              <div>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                  <button type="button" class="btn btn-outline-primary btn-sm"
+                    [ngClass]="{'blue-btn': statespdoi == true}"
+                    (click)="getPDOStatesStats(); statespdoi = true">PDO indicator(States)</button>
+                  <button type="button" class="btn btn-outline-primary btn-sm"
+                    [ngClass]="{'blue-btn': statespdoi == false}"
+                    (click)="getSubPDOStatesStats(); statespdoi = false">Sub PDO indicator(States)</button>
+                </div>
+              </div>
+            </div>
+            <!-- <canvas id="stackbudget" width="764" height="355"></canvas> -->
+            <highcharts-chart [Highcharts]="highcharts" [options]="pdoStateChartsOptions"
+              style="width: 100%; height: 400px; display: block; overflow-x: auto;">
+            </highcharts-chart>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-4 justify-content-end"
+        *ngIf="currentUserObj.roles[0].name == 'admin'  || currentUserObj.roles[0].name == 'npcu'">
+        <div class="col-lg-8 row justify-content-end">
+          <div class="form-group col-2">
+            <select name="state_id" id="state_id" class="form-select form-select-sm" [(ngModel)]="selectedYear">
+              <option value="" selected>- Select Year -</option>
+              <option [value]="item.id" *ngFor="let item of years">{{item.title}}</option>
+            </select>
+          </div>
+          <div class="form-group col-2">
+            <select name="state_id" id="state_id" class="form-select form-select-sm" [(ngModel)]="selectedQuarter">
+              <option value="" selected>- Select Quarter -</option>
+              <option [value]="item.id" *ngFor="let item of quarters">{{item.title}}</option>
+            </select>
+          </div>
+          <div class="form-group col-5" *ngIf="statespdoi">
+            <select name="pdo_indicator_id" id="pdo_indicator_id" class="form-select form-select-sm"
+              [(ngModel)]="pdo_indicator_id">
+              <option value="" selected>- Select PDO -</option>
+              <option [value]="item.id" *ngFor="let item of pdos">{{item.title}}</option>
+            </select>
+          </div> 
+          <div class="form-group col-5" *ngIf="!statespdoi">
+            <select name="sub_pdo_indicator_id" id="sub_pdo_indicator_id" class="form-select form-select-sm"
+              [(ngModel)]="sub_pdo_indicator_id">
+              <option value="" selected>- Select Sub PDO -</option>
+              <option [value]="item.id" *ngFor="let item of subpdos">{{item.title}}</option>
+            </select>
+          </div> 
+          
+          <!-- <div class="form-group col-3">
+            <select name="state_id" id="state_id" class="form-select form-select-sm" [(ngModel)]="state_id">
+              <option value="" selected>- Select State -</option>
+              <option [value]="item.id" *ngFor="let item of states">{{item.title}}</option>
+            </select>
+          </div>
+          -->
+          <div class="col-2">
+            <div class="d-grid gap-2">
+              <button class="btn btn-sm blue-btn px-3 my-0" (click)="getPDOStatesStats()">Apply Filter</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      
+      
+      <div class="row sec-row">
+        <!-- <div class="row sec-row" *ngIf="currentUserObj.roles[0].name == 'admin' || currentUserObj.roles[0].name == 'npcu' || currentUserObj.roles[0].name == 'state'"> -->
+        <div class="col-12">
+          <div class="card p-4">
+            <div class="d-flex justify-content-between mb-4">
+              <p class="mb-0">Intermediate Outcome Indicator</p>
+              <!-- <div>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                  <button type="button" class="btn btn-outline-primary btn-sm"
+                    [ngClass]="{'blue-btn': currentReport == 'indicator'}"
+                    (click)="getPDOStats(); currentReport = 'indicator'">PDO indicator</button>
+                  <button type="button" class="btn btn-outline-primary btn-sm"
+                    [ngClass]="{'blue-btn': currentReport == 'sub-indicator'}"
+                    (click)="getSubPDOStats(); currentReport = 'sub-indicator'">Sub PDO indicator</button>
+                </div>
+              </div> -->
+            </div>
+            <!-- <canvas id="stackbudget" width="764" height="355"></canvas> -->
+            <highcharts-chart [Highcharts]="highcharts" [options]="ioiChartsOptions"
+              style="width: 100%; height: 400px; display: block; overflow-x: auto;">
+            </highcharts-chart>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-4 justify-content-end">
+        <div class="col-lg-8 row justify-content-end">
+          <div class="form-group col-2">
+            <select name="state_id" id="state_id" class="form-select form-select-sm" [(ngModel)]="selectedYear">
+              <option value="" selected>- Select Year -</option>
+              <option [value]="item.id" *ngFor="let item of years">{{item.title}}</option>
+            </select>
+          </div>
+          <div class="form-group col-2">
+            <select name="state_id" id="state_id" class="form-select form-select-sm" [(ngModel)]="selectedQuarter">
+              <option value="" selected>- Select Quarter -</option>
+              <option [value]="item.id" *ngFor="let item of quarters">{{item.title}}</option>
+            </select>
+          </div>
+          <div class="form-group col-3" *ngIf="currentUserObj.roles[0].name == 'admin'  || currentUserObj.roles[0].name == 'npcu'">
+            <select name="state_id" id="state_id" class="form-select form-select-sm" [(ngModel)]="state_id">
+              <option value="" selected>- Select State -</option>
+              <option [value]="item.id" *ngFor="let item of states">{{item.title}}</option>
+            </select>
+          </div>
+          <div class="form-group col-5">
+            <select name="sub_component_id" id="sub_component_id" class="form-select form-select-sm"
+              [(ngModel)]="sub_component_id">
+              <option value="" selected>- Select Intermediate Outcome Component -</option>
+              <option [value]="item.id" *ngFor="let item of iComponents">{{item.title}}</option>
+            </select>
+          </div>
+          <div class="col-2">
+            <div class="d-grid gap-2">
+              <button class="btn btn-sm blue-btn px-3 my-0" (click)="getIOIStats()">Apply Filter</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 2nd row  -->
+      
+      <div class="row sec-row" *ngIf="projects && projects?.length > 0">
+        <div class="col-lg-3 col-md-4">
+          <div class="map">
+            <app-map [mapData]="projects"></app-map>
+          </div>
+      
+          <!-- <p>Reporting Rate</p> -->
+          <!-- <div class="budget-body row">
+              <div class="offset-lg-2 col-lg-8 offset-lg-2">
+                <div class="budget-chart">
+                  <canvas id=chartbudget width="44" height="55"></canvas>
+      
+                  <div class="text-center report-text">
+                    <p class="mb-0">75%</p>
+                    <p class="mb-0">Report Efficiency</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-12 pt-4">
+                <div class="budget-list">
+                  <div class="d-flex justify-content-between">
+                    <p class="mb-0"><small class="text">Report Requested</small></p>
+                    <p class="mb-0"><small class="text">87</small></p>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <p class="mb-0"><small class="text">Total Submitted</small></p>
+                    <p class="mb-0"><small class="text">87</small></p>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <p class="mb-0"><small class="text">Not Submitted</small></p>
+                    <p class="mb-0"><small class="text">87</small></p>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+        </div>
+      
+        <div class="col-lg-9">
+          <div class="card p-3">
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">S/N</th>
+                    <th scope="col">Project Name</th>
+                    <th scope="col">State</th>
+                    <th scope="col">LGA</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Completion Rate</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let project of projects; let i = index">
+                    <th scope="row">{{i + 1}}</th>
+                    <td>{{project?.title}}</td>
+                    <td>{{project?.state}}</td>
+                    <td>{{project?.lga}}</td>
+                    <td>{{project?.status}}</td>
+                    <td>{{project?.loc}}%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 3rd row  -->
+      <div class="row sec-row">
+        <!-- <div class="row sec-row" *ngIf="currentUserObj.roles[0].name == 'admin' || currentUserObj.roles[0].name == 'npcu' || currentUserObj.roles[0].name == 'state'"> -->
+        <div class="col-12">
+          <div class="card p-4">
+            <div class="d-flex justify-content-between mb-4">
+              <p class="mb-0">Cross cutting issues</p>
+              <!-- <div>
+                  <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-outline-primary btn-sm" [ngClass]="{'blue-btn': currentReport == 'indicator'}" (click)="getPDOStats(); currentReport = 'indicator'">PDO indicator</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm" [ngClass]="{'blue-btn': currentReport == 'sub-indicator'}" (click)="getSubPDOStats(); currentReport = 'sub-indicator'">Sub PDO indicator</button>
+                  </div>
+                </div> -->
+            </div>
+            <!-- <canvas id="stackbudget" width="764" height="355"></canvas> -->
+            <highcharts-chart [Highcharts]="highcharts" [options]="crossCuttingOptions"
+              style="width: 100%; height: 400px; display: block; overflow-x: auto;">
+            </highcharts-chart>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row sec-row">
+        <div class="col-12">
+          <div class="d-flex justify-content-between px-3 mb-3">
+            <h6 class="text-gre mb-0">Filter Crosscutting Issues</h6>
+          </div>
+          <div class="card container-fluid py-3">
+            <form [formGroup]="form" class="flex-column">
+              <div class="row">
+                <div class="col-lg-3 col-md-6">
+                  <div class="form-group">
+                    <label for="">Year</label>
+                    <select (change)="submit()" required formControlName="year" class="form-select">
+                      <option value="" selected>- Select Year -</option>
+                      <option [value]="item.id" *ngFor="let item of years">{{item.title}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <div class="form-group">
+                    <label for="">Quarter</label>
+                    <select (change)="submit()" required="" formControlName="quarter" name="quarter" class="form-select">
+                      <option value="" selected>- Select Quarter -</option>
+                      <option [value]="item.id" *ngFor="let item of quarters">{{item.title}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6" *ngIf="currentUserObj.roles[0].name == 'admin'  || currentUserObj.roles[0].name == 'npcu'">
+                  <div class="form-group">
+                    <label for="">State</label>
+                    <select (change)="submit()"  formControlName="state_id" name="state_id" id="state_id" class="form-select">
+                      <option value="" selected>- Select State -</option>
+                      <option [value]="item.id" *ngFor="let item of states">{{item.title}}</option>
+                    </select>
+      
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <div class="form-group">
+                    <label for="">Subcomponent</label>
+                    <select (change)="submit()" required="" formControlName="sub_component_id" name="sub_component_id"
+                      class="form-select">
+                      <!-- <option value="" selected>- Select sub component -</option> -->
+                      <option *ngFor="let item of subComponents" [value]="item.id">{{item.title}}</option>
+                    </select>
+                  </div>
+                </div>
+      
+      
+              </div>
+              <!-- <div class="col"><span class="cursor" (click)="filterValue = undefined">Clear</span></div> -->
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+</div>

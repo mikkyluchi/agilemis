@@ -1,0 +1,644 @@
+.finish {
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
+  background-color: #fff !important;
+  margin: 0;
+  padding: 10px;
+
+  width: 100%;
+  opacity: 1;
+  z-index: 1000;
+
+  a {
+    float: right;
+    font-size: 16px;
+    padding: 5px 34px;
+
+  }
+}
+
+$color: #222;
+$border-color: #436AB5;
+$background-color: #eee;
+$border-weight: 1px;
+$margin: 12px;
+
+.nav-tabs .nav-link {
+  color: #18a972 !important
+}
+
+/* Code based on this sample http://thecodeplayer.com/walkthrough/css3-family-tree */
+
+/*Now the CSS*/
+.content {
+  background-color: transparent;
+}
+
+h3 {
+  color: #436AB5
+}
+
+
+
+.tree {
+  margin: $margin * 1.5;
+  padding: 0;
+  color: #343434;
+  &:not(:empty):before,
+  &:not(:empty):after,
+  ul:before,
+  ul:after,
+  li:before,
+  li:after {
+    display: block;
+    position: absolute;
+    content: "";
+  }
+
+  &>ul>li:after, &>ul>li:before, &>ul:before, &>ul:after{
+      content: none;
+  }
+
+  ul,
+  li {
+    position: relative;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    list-style: none;
+  }
+}
+
+/*Remove space from the top of single children*/
+.tree li:only-child {
+  padding-top: 0;
+}
+
+// /* ------------------------------------------------------------------ */
+// /* Time for some hover effects                                        */
+// /* We will apply the hover effect the the lineage of the element also */
+// /* ------------------------------------------------------------------ */
+
+.tree li a {
+  border: 1px solid #436AB5;
+  padding: 1em 0.375em;
+  text-decoration: none;
+  font-family: arial, verdana, tahoma;
+  font-size: 0.5rem;
+  display: inline-block;
+  width: 250px;
+
+
+  /*
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+  */
+
+  transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+
+
+}
+
+.tree li a:hover,
+.tree li a:hover+ul li a {
+  background: #436AB5;
+  color: white;
+  /* border: 1px solid #aaa; */
+}
+
+/*Connector styles on hover*/
+.tree li a:hover+ul li::after,
+.tree li a:hover+ul li::before,
+.tree li a:hover+ul::before,
+.tree li a:hover+ul ul::before {
+  border-color: #aaa;
+}
+
+
+.tree li div.org-box {
+  border: 1px solid #436AB5;
+  /* padding: 1em 0.75em; */
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.8rem;
+  display: flex;
+  width: 16.25rem !important;
+  position: relative;
+  border-radius: 5px;
+}
+
+.tree li div.org-box.priority {
+  width: 8.125rem;
+  text-align: center;
+  background: #BDD3FF24;
+  // height: 5.375rem;
+}
+
+.tree li div.org-box.mandate {
+  width: 12.975rem;
+
+}
+
+.tree .outcome li div.org-box,
+.tree .output li div.org-box {
+  width: 12.975rem;
+}
+
+.tree .outcome li div.org-box,
+.tree .jobs li div.org-box {
+  width: 12.975rem;
+}
+
+.tree li div.org-box:hover .org-settings {
+  display: block;
+}
+
+.rel {
+  position: relative;
+}
+
+.org-settings {
+  color: #C4C4C4;
+  font-weight: normal;
+  padding: 0px;
+  .btn{
+    // padding: .2rem .2rem !important;
+    border: none;
+  }
+}
+
+.org-metrics {
+
+  position: absolute;
+  bottom: -5px;
+  width: 100%;
+  padding-bottom: 10px;
+
+  [class*="col-"] {
+    border-right: solid 1px #eee;
+    padding: 0;
+  }
+
+  [class*="col-"]:last-child {
+    border-right: none;
+  }
+
+  p {
+    line-height: 15px;
+  }
+}
+
+
+.org-name {
+  width: 100%;
+  padding: 0px !important;
+  font-size: 13px;
+  float: left;
+  flex: 1;
+  border-right: 1px solid rgba(111, 111, 118, 0.28) !important;
+
+}
+
+.org-result {
+  font-size: .65rem;
+  font-weight: 400;
+}
+
+
+.org-result .actual {
+  font-size: 1.575rem;
+  background: transparent;
+}
+
+.org-name span.title {
+
+  font-size: .7rem;
+  text-transform: uppercase;
+}
+
+.h50 {
+
+  height: 50px;
+}
+
+.indicator .box {
+
+  width: 350px;
+  height: 150px;
+  border: 1px solid #436AB5;
+  margin-left: 10px;
+  margin-top: 10px;
+  float: left;
+}
+
+.indicator .box::first-child {
+
+  margin-left: 0px;
+}
+
+.indicator .box .total {
+
+  width: 33%;
+  height: 100%;
+  border-left: 1px solid #436AB5;
+  text-align: center;
+  display: inline-block;
+}
+
+.indicator .box .content {
+
+  width: 66%;
+  height: 100%;
+  float: left;
+}
+
+.indicator .box .total span {
+
+  font-size: 30px;
+  font-weight: bold;
+  display: block;
+
+}
+.rel {
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background: #222;
+  opacity: 0.5;
+  /* z-index: 10; */
+}
+
+.overlay-view {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 95%;
+  height: 100%;
+  background: #fff;
+  z-index: 10;
+}
+
+.submission-box {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 95%;
+  height: 100%;
+  background: #fafafa;
+
+}
+
+.hover:hover {
+
+  background-color: #BDE6F2;
+}
+
+.plan-indicator {
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  background: #F0AD4E;
+  z-index: 9999;
+  display: none;
+}
+
+.input-group:hover .plan-indicator {
+  display: block;
+}
+
+
+// .hori-scrollable-box {
+
+//   overflow-x: scroll;
+//   overflow-y: hidden;
+//   width: 100%;
+//   height: 500px;
+// }
+
+// .hori-scrollable-box-inner {
+
+//   width: 10000px;
+
+// }
+
+// .hori-scrollable-box div.thumbnail:not(last-child) {
+//   margin-right: 5px;
+// }
+
+main {
+  min-width: 320px;
+  max-width: 800px;
+  padding: 50px;
+  margin: 0 auto;
+  background: #fff;
+}
+
+s {
+  display: none;
+  padding: 20px 0 0;
+  border-top: 1px solid #ddd;
+}
+
+label {
+  font-size: .8em;
+  display: inline-block;
+  margin: 0 0 -1px;
+  padding: 5px 10px;
+  font-weight: 600;
+  text-align: center;
+  color: #bbb;
+  border: 1px solid transparent;
+  text-transform: capitalize;
+}
+
+
+label:before {
+  font-family: fontawesome;
+  font-weight: normal;
+  margin-right: 10px;
+}
+
+
+
+label:hover {
+  color: #888;
+  cursor: pointer;
+}
+
+input:checked+label {
+  color: #555;
+  border: 1px solid #ddd;
+  border-top: 2px solid #436AB5;
+  border-bottom: 1px solid #fff;
+}
+
+#tab1:checked~#content1,
+#tab2:checked~#content2,
+#tab3:checked~#content3,
+#tab4:checked~#content4 {
+  display: block;
+}
+
+@media screen and (max-width: 650px) {
+  label {
+    font-size: 0;
+  }
+
+  label:before {
+    margin: 0;
+    font-size: 18px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  label {
+    padding: 15px;
+  }
+}
+
+::-webkit-scrollbar {
+  display: none;
+  width: 0px;
+  background-color: transparent;
+}
+
+.padding-5 {
+  padding: 5px !important;
+}
+
+.space5 {
+  display: block;
+  margin-bottom: 5px !important;
+  clear: both;
+}
+
+.text-extra-large {
+  font-size: 14px !important;
+}
+
+.btn {
+  font-size: .7em;
+}
+
+.spinner-three-bounce[_ngcontent-c3] {
+  margin: 10px auto;
+  position: relative;
+}
+
+span.link:hover {
+  text-decoration: underline;
+}
+
+
+.mdas {
+  position: fixed;
+  top: 100px;
+  right: 150px;
+  z-index: 20;
+}
+
+.zoom-btn {
+  position: fixed;
+  // bottom: 100px;
+  bottom: 50px;
+  right: 100px;
+  z-index: 10;
+}
+
+.bad {
+  border-top: solid 5px red !important
+}
+
+.medium {
+  border-top: solid 5px orange !important
+}
+
+.good {
+  border-top: solid 5px #18a972 !important
+}
+
+.horizontal {
+  li {
+    display: flex !important;
+    align-items: center !important;
+    margin-left: $margin * 2 !important;
+
+    div {
+      margin: $margin/2 0;
+    }
+
+    &:before {
+      border-left: $border-weight solid $border-color;
+      height: 100%;
+      width: 0;
+      top: 0;
+      left: -$margin;
+    }
+
+    &:first-child:before {
+      height: 50%;
+      top: 50%;
+    }
+
+    &:last-child:before {
+      height: 50%;
+      bottom: 50%;
+      top: auto;
+    }
+
+    &:after,
+    ul:after {
+      border-top: $border-weight solid $border-color;
+      height: 0;
+      width: $margin;
+      top: 50%;
+      left: -$margin;
+    }
+
+    &:only-child:before {
+      content: none;
+    }
+
+    ul:after {
+      left: 0;
+    }
+  }
+
+  &>li {
+    &:only-child {
+      margin-left: 0;
+    }
+
+    &:only-child:before,
+    &:only-child:after {
+      content: none;
+    }
+  }
+}
+
+.carret {
+cursor: pointer;
+-webkit-user-select: none; /* Safari 3.1+ */
+-moz-user-select: none; /* Firefox 2+ */
+-ms-user-select: none; /* IE 10+ */
+user-select: none;
+position: absolute;
+// top: 15px;
+left: calc(16.25rem - 20px);
+}
+
+.carret::before {
+content: "\25B6";
+color: black;
+display: inline-block;
+margin-right: 6px;
+}
+
+.carret-down::before {
+-ms-transform: rotate(90deg); /* IE 9 */
+-webkit-transform: rotate(90deg); /* Safari */
+transform: rotate(90deg);
+}
+
+.nested {
+display: none;
+}
+
+.active {
+display: block;
+}
+
+.vertical {
+display: flex;
+
+ul {
+  display: flex;
+  justify-content: center;
+
+  &.nested {
+    display: none;
+
+    &.active {
+      display: flex;
+    }
+  }
+}
+
+li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+
+.carret {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+  div.org-box {
+    margin: 12px;
+  }
+
+  &:before {
+    border-left: $border-weight solid $border-color;
+    height: $margin;
+    width: 0;
+    top: 0;
+  }
+
+  &:after {
+    border-top: $border-weight solid $border-color;
+    height: 0;
+    width: 100%;
+  }
+
+  &:first-child:after {
+    border-top: $border-weight solid $border-color;
+    height: 0;
+    width: 50%;
+    left: 50%;
+  }
+
+  &:last-child:after {
+    border-top: $border-weight solid $border-color;
+    height: 0;
+    width: 50%;
+    right: 50%;
+  }
+
+  &:only-child:after {
+    content: none;
+  }
+
+  ul:before {
+    border-left: $border-weight solid $border-color;
+    height: $margin;
+    width: 0;
+    top: -$margin;
+  }
+}
+
+&>li {
+
+  &:only-child:before,
+  &:only-child:after {
+    content: none;
+  }
+}
+}

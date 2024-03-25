@@ -1,0 +1,79 @@
+<div class="modal-header">
+  <h2 class="modal-title">
+    Setup your stratregic view</h2>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <!-- <div class="steps" [@slideInLeft]="{ value: slideInLeft, params: { timing:0.3 } }" [hidden]="step == 0 || step == 7"> -->
+  <div class="steps" [@slideInLeft]="{ params: { timing:0.3 } }" [hidden]="step == 0 || step == 7">
+  
+    <div [ngClass]="{ filled: step >= 1 }" class="step"></div>
+    <div [ngClass]="{ filled: step >= 2 }" class="step"></div>
+    <div [ngClass]="{ filled: step >= 3 }" class="step"></div>
+    <!-- <div [ngClass]="{ filled: step >= 3 }" class="step"></div> -->
+    <!-- <div [ngClass]="{ filled: step >= 4 }" class="step"></div>
+    <div [ngClass]="{ filled: step >= 5 }" class="step"></div>
+    <div [ngClass]="{ filled: step >= 6 }" class="step"></div> -->
+  </div>
+
+  <div id="page1" *ngIf="page == 1" >
+    <div class="bg" [@bounceIn]="bounceIn">
+      <div class="text-center">
+
+        <div class="button">
+          <!-- <img src="assets/images/logo.png" alt=""> -->
+          <h4> Default View </h4>
+        </div>
+        <div class="button">
+          <!-- <img src="assets/images/logo.png" alt=""> -->
+          <h4> Mda Template </h4>
+        </div>
+        <div class="button" (click)="page =2; step =2">
+          <!-- <img src="assets/images/logo.png" alt=""> -->
+          <h4> Custom View </h4>
+
+        </div>
+
+
+      </div>
+
+    </div>
+  </div>
+  <div id="page" *ngIf="page == 2" [@bounceIn]="bounceIn">
+    <ul id="compositions-list" class="pure-tree main-tree">
+      <li  >
+        <input hidden type="checkbox" id="trigger-views" checked="checked">
+        <label for="trigger-views">Lift 100 million Nigerians out of poverty in 10 years</label>
+        <ul class="pure-tree">
+          <!-- <li class="pure-tree_link"><a href="" title="index.jade" target="_blank">index.html</a></li> -->
+          <li *ngFor="let item of data" >
+            <input type="checkbox" id="trigger-{{item.id}}">
+            <label for="trigger-{{item.id}}">{{item.title}}</label>
+            <ul class="pure-tree">
+              <li  *ngFor="let man of item.mandates">
+                <input type="checkbox" id="trigger-{{man.id}}">
+                <label for="trigger-{{man.id}}">{{man.title}}</label>
+                <!-- <ul class="pure-tree">
+                  <li class="pure-tree_link"><a href="" title="index.jade" target="_blank">index.html</a></li>
+                </ul> -->
+              </li>
+              <li [hidden]="item.mandates?.length > 0" >
+                No mandates added yet
+              </li>
+            </ul>
+          </li>
+        
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="modal-footer">
+  <a (click)="step = step-1; page = page-1" *ngIf="step > 1"   href="javascript:void(0)" class="btn btn-secondary  float-left"><< Back</a>
+  <button type="submit" class="btn btn-secondary">Use Default</button>
+  <button type="submit" class="btn submit">Save</button>
+</div>
+<!-- </form> -->

@@ -1,0 +1,608 @@
+<div class="d-flex align-items-baseline justify-content-between">
+    <div>
+        <span class="page_title ps-0 mb-4">Fiscal managment</span>
+        <span class="page_sub">
+          <label>Select Year</label>
+          <select class="selectOption" [(ngModel)]="activeYear" (change)="getData()" >
+            <option [value]="item" *ngFor="let item of years">{{item}}</option>
+          </select>
+        </span>
+    </div>
+    <div class="d-flex justify-content-end mt-2">
+        <div class="d-flex flex-row">
+          <button *ngIf="showBtn" class="add-button align-items-center d-flex me-2 ps-0" style="background: #36A9B0;" data-toggle="modal" data-target="#createreleaseModal" (click)="releaseModalReset()">
+            <img src="assets/img/icons/blueplus.svg" alt="">
+           OAGF Report
+          </button>
+
+            <button   *ngIf="!showBtn"   class="dropdown-toggle add-button align-items-center d-flex me-2 px-2"data-toggle="modal" data-target="#purgeministryModal"   style="background: #0da40d;" (click)="resetPurgeMinistry()">
+            Purge By Ministry
+          </button>
+          <button   *ngIf="showPurgeMinistryBtn"   class="dropdown-toggle add-button align-items-center d-flex me-2 px-2"data-toggle="modal" data-target="#purgeministryReleaseModal"   style="background: #0da40d;    " (click)="resetPurgeMinistry()">
+          Purge By Ministry
+        </button>
+          <button  *ngIf="showBdgtBtn"  class="add-button align-items-center d-flex me-2 ps-0" style="background: #36A9B0; " data-toggle="modal" data-target="#createbudgetModal" (click)="resetWizard()">
+              <img src="assets/img/icons/blueplus.svg" alt="">
+              Upload Budget
+          </button>
+          <button *ngIf="!showPurgeBtn" class="align-items-center requstbtn me-3 ps-4 pe-4" data-toggle="modal" data-target="#purgeyearModal" >
+            Purge
+          </button>
+          <button *ngIf="showPurgeBtn" class="align-items-center requstbtn me-3 ps-4 pe-4" data-toggle="modal" data-target="#purgeyearReleaseModal" >
+            Purge
+          </button>
+        </div>
+    </div>
+</div>
+
+<!--<div class="row">
+    <span class="pending">Approved budget line items and project for the current active year
+    </span>
+</div>-->
+
+<div class="secondrow" style="margin-top: 20px;">
+    <!-- <div class="d-flex">
+        <button class="filterbtn me-2"><img src="assets/img/icons/filter.svg" alt="" class="me-1"  > <span class="me-3">Filter</span></button>
+        <div class="input-group no-border">
+          <div class="input-group-append d-flex">
+            <div *ngIf="showSearchbar" class="input-group-text">
+              <i class="nc-icon nc-zoom-split search-icon" (click)="searchBudget()"></i>
+              <i class="nc-icon nc-minimal-down down-icon"></i>
+            </div>
+            <div *ngIf="!showSearchbar" class="input-group-text">
+              <i class="nc-icon nc-zoom-split search-icon" (click)="searchRelease()"></i>
+              <i class="nc-icon nc-minimal-down down-icon"></i>
+            </div>
+            <input   type="text" value="" class="form-control" style="width: 402px;"  [(ngModel)]="query" >
+
+          </div>
+        </div>
+    </div> -->
+
+    <div id="tabs">
+        <ul class="nav nav-tabs" id="user-nav-tabs">
+            <li role="presentation" (click)="toggleBtn()" [class.active]="showBdgtBtn"><a  class="#c1">Budget</a></li>
+            <li role="presentation" (click)="getRelase('1')" [class.active]="showBtn"><a class="#c2">Releases</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="content" class="mx-0">
+    <div id="content1">
+        <table class="table table-hover" >
+            <thead>
+              <tr>
+                <th><input type="checkbox" value="Bike"></th>
+                <th>#</th>
+                <th class="text-gre">Ministry</th>
+                <th class="text-gre">Code</th>
+                <th class="text-gre">Line Item</th>
+                <th class="text-gre">Cost</th>
+                <th class="text-gre">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor=" let item of allBudgetdata| paginate: { itemsPerPage: 5, currentPage: p }; let i = index">
+                <td><input type="checkbox" value="Bike"></td>
+                <td>{{i + 1}}</td>
+                <td>{{item.mda.shortcode}}</td>
+                <td  >{{item.budget_code}}</td>
+                <td>
+                  <!--<input type="text"     [(ngModel)]="item.budget_line_item"  [disabled]="!item.isEditable">-->
+                  {{item.budget_line_item}}
+                </td>
+                <td>
+                  {{item.amount}}
+                </td>
+                <td>
+                  <div class="btn-group ddl-actions">
+                    <button type="button" class="btn-actions dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <img src="assets/img/icons/more.svg" alt="">
+                    </button>
+
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" data-toggle="modal" data-target="#editBudgetModal" (click)="editBudget(item)">Edit</a>
+                      <a class="dropdown-item" data-toggle="modal" data-target="#delbudgetModal" (click)="budgetId(item.id)"> Delete</a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+            </tbody>
+        </table>
+      <pagination-controls (pageChange)="p = $event"> </pagination-controls>
+
+    </div>
+    <div id="content2">
+        <div id="fiscaltabs">
+            <ul class="nav nav-tabs" id="fiscal-nav-tabs">
+              <li role="presentation" class="active"><a  class="#c3" (click) ="getRelase('1')">1st Release</a></li>
+              <li role="presentation"><a  class="#c4"  (click)="getRelase('2')">2nd Release</a></li>
+              <li role="presentation"><a  class="#c5" (click)="getRelase('3')">3rd Release</a></li>
+              <li role="presentation"><a  class="#c6" (click)="getRelase('4')">4th Release</a></li>
+            </ul>
+        </div>
+        <div id="new_contents">
+            <div id="content3" style="display: block;">
+                <table class="table table-borderless mt-4" id="releaseTable1">
+                    <thead>
+                      <tr>
+                        <th><input type="checkbox" (click) = "checkuncheckall()" value="Bike"></th>
+                        <th>#</th>
+                        <th class="text-gre">Ministry</th>
+                        <th class="text-gre">Appropriated</th>
+                        <th class="text-gre">Released</th>
+                        <th class="text-gre">Utalized</th>
+                        <th class="text-gre">Rate(%)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of allReleasedata| paginate: { itemsPerPage: 20, currentPage: p }">
+                        <td><input type="checkbox" [value] = "item.id" (change)="getCheckboxData($event)" [checked]="isChecked"  value="Bike"></td>
+                        <td>{{item.id}}</td>
+                        <td>{{item.mda_id}}</td>
+                        <td>{{item.budget}}</td>
+                        <td>{{item.released}}</td>
+                        <td>{{item.utilized}}</td>
+                        <td class="text-gre">₦{{item.rate}}</td>
+                      </tr>
+
+
+
+                    </tbody>
+                </table>
+              <pagination-controls (pageChange)="p = $event"> </pagination-controls>
+            </div>
+
+            <div id="content4">
+              <table class="table table-borderless mt-4" id="releaseTable2">
+              <thead>
+              <tr>
+                <th><input type="checkbox" value="Bike"></th>
+                <th>#</th>
+                <th class="text-gre">Ministry</th>
+                <th class="text-gre">Appropriated</th>
+                <th class="text-gre">Released</th>
+                <th class="text-gre">Utalized</th>
+                <th class="text-gre">Rate(%)</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let item of allReleasedata| paginate: { itemsPerPage: 20, currentPage: p }">
+                <td><input type="checkbox" value="Bike"></td>
+                <td>{{item.id}}</td>
+                <td>{{item.mda_id}}</td>
+                <td>{{item.budget}}</td>
+                <td>{{item.released}}</td>
+                <td>{{item.utilized}}</td>
+                <td class="text-gre">₦{{item.rate}}</td>
+              </tr>
+
+              </tbody>
+            </table>
+              <pagination-controls (pageChange)="p = $event"> </pagination-controls>
+            </div>
+            <div id="content5">
+
+              <table class="table table-borderless mt-4" id="releaseTable3">
+                <thead>
+                <tr>
+                  <th><input type="checkbox" value="Bike"></th>
+                  <th>#</th>
+                  <th class="text-gre">Ministry</th>
+                  <th class="text-gre">Appropriated</th>
+                  <th class="text-gre">Released</th>
+                  <th class="text-gre">Utalized</th>
+                  <th class="text-gre">Rate(%)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let item of allReleasedata| paginate: { itemsPerPage: 20, currentPage: p }">
+                  <td><input type="checkbox" value="Bike"></td>
+                  <td>{{item.id}}</td>
+                  <td>{{item.mda_id}}</td>
+                  <td>{{item.budget}}</td>
+                  <td>{{item.released}}</td>
+                  <td>{{item.utilized}}</td>
+                  <td class="text-gre">₦{{item.rate|number}}</td>
+                </tr>
+
+                </tbody>
+              </table>
+              <pagination-controls (pageChange)="p = $event"> </pagination-controls>
+            </div>
+            <div id="content6">
+
+              <table class="table table-borderless mt-4" id="releaseTable4">
+                <thead>
+                <tr>
+                  <th><input type="checkbox" value="Bike"></th>
+                  <th>#</th>
+                  <th class="text-gre">Ministry</th>
+                  <th class="text-gre">Appropriated</th>
+                  <th class="text-gre">Released</th>
+                  <th class="text-gre">Utalized</th>
+                  <th class="text-gre">Rate(%)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let item of allReleasedata| paginate: { itemsPerPage: 20, currentPage: p }">
+                  <td><input type="checkbox" value="Bike"></td>
+                  <td>{{item.id}}</td>
+                  <td>{{item.mda_id}}</td>
+                  <td>{{item.budget}}</td>
+                  <td>{{item.released}}</td>
+                  <td>{{item.utilized}}</td>
+                  <td class="text-gre">₦{{item.rate}}</td>
+                </tr>
+
+                </tbody>
+              </table>
+              <pagination-controls (pageChange)="p = $event"> </pagination-controls>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Upload OAGF Report-->
+
+<div class="modal fade bd-example-modal-lg" id="createreleaseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header  ">
+          <div class="d-flex flex-column">
+            <h5 class="modal-title" id="exampleModalLabel">OAGF Report Upload</h5>
+            <span class="modal-title-text">Office of the Accountant General of the Federation Report Upload</span>
+          </div>
+          <a class=" btn-close" data-dismiss="modal" aria-label="Close"></a>
+        </div>
+        <div class="modal-body d-flex flex-column">
+              <div class="container" *ngIf="arraylist?.length < 1">
+                <div class="row">
+                  <div class="col-md-12">
+                    <label for="">Select Realese</label>
+
+                    <select class="selectOption yearSelect"  [(ngModel)]="selectedRelease" >
+                      <option hidden>{{placeHolder}}</option>
+                      <option *ngFor="let item of  release">{{item}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <label for="">Select Year</label>
+                    <select class="selectOption yearSelect"  [(ngModel)]="activeYear">
+                      <option [value]="item" *ngFor="let item of years">{{item}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="formFile" class="form-label">Select Release XLSX Files to Upload *</label>
+                  <input type="file" (change)="onfilechange($event)" multiple="false" name="file-name" id="file-name" class="form-control" accept=".csv, .xlsx, .xls">
+                </div>
+              </div>
+            <div>
+              <div class="container" *ngIf="arraylist?.length > 0">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div><span><b>Upload</b> </span> Register Release for {{activeYear}} </div>
+                  </div>
+
+                  <div class="col-md-12">
+                    <div><span><b>File Name</b></span>{{fileName}}  </div>
+                  </div>
+                </div>
+
+                <div class="col-md-12">
+                  <div class="d-flex flex-md-row justify-content-end">
+                    <input type="search" placeholder="Search..." class="bdgt_search form-control" [(ngModel)]="query">
+                  </div>
+                  <table class="table table-hover table-fixed">
+                    <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Ministry</th>
+                      <th>Appropriated</th>
+                      <th>Quarter</th>
+                      <th>Released</th>
+                      <th>Utilized</th>
+                      <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let item of arraylist | filter:query | paginate: { itemsPerPage: 5, currentPage: p } ">
+                      <td>{{item.__rowNum__}}</td>
+                      <td>{{item.mda_shortcode}}</td>
+                      <td>{{item.Appropriated}}</td>
+                      <td>{{item.quarter}}</td>
+                      <td>{{item.released}}</td>
+                      <td>{{item.utilized}}</td>
+                      <td>
+                        <a   (click)="delReleaseTableData(item.__rowNum__)"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                  <pagination-controls (pageChange)="p = $event"> </pagination-controls>
+                  <div  class="footer d-flex flex-md-row justify-content-center">
+                    <button class="closs cancel" data-dismiss="modal" aria-label="Close">Cancel</button>
+                    <button type="submit"  class="submit" id="nexts2"  (click)="createRelease()">Upload  Release</button>
+                  </div>
+
+                </div>
+              </div>
+
+
+
+            </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+<!--Upload Budget-->
+<div class="modal fade bd-example-modal-lg" id="createbudgetModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header  ">
+        <h5 class="modal-title" id="exampleModalLabel">Budget Upload</h5>
+        <a class=" btn-close" data-dismiss="modal" aria-label="Close"></a>
+      </div>
+      <div class="modal-body d-flex flex-column">
+
+            <div class="container" *ngIf="arraylist?.length < 1">
+              <div class="row">
+                <div class="col-md-12">
+                  <label for="">Select Ministry's name to upload Approved budget line items *</label>
+                  <select name="selectMda" id="" class="form-select" [(ngModel)]="selectMda">
+                    <option *ngFor="let item of mdasList" [value]="item.id">{{item.name}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <label for="">Select Year</label>
+                  <select  class="selectOption  yearSelect" [(ngModel)]="activeYear">
+                    <option [value]="item" *ngFor="let item of years">{{item}}</option>
+                  </select>
+
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="formFile" class="form-label">Select Budget XLSX Files to Upload *</label>
+                <input type="file" (change)="onfilechange($event)" multiple="false" name="file-name" id="file-name" class="form-control" accept=".csv, .xlsx, .xls">
+              </div>
+            </div>
+          <div>
+            <div class="container" *ngIf="arraylist?.length > 0">
+              <div class="row">
+                <div class="col-md-12">
+                  <div><span><b>Upload</b> </span> Register Budget for {{activeYear}}</div>
+                </div>
+                <div class="col-md-12">
+                  <div><span><b>Ministry: </b></span> {{selectMdas[0].name}} </div>
+                </div>
+                <div class="col-md-12">
+                  <div><span><b>File Name:</b></span> {{fileName}}</div>
+                </div>
+                <div class="progress" style=" width: 100%; margin-bottom: 8px;">
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="d-flex flex-md-row justify-content-end">
+                  <input type="search" placeholder="Search..." class="bdgt_search form-control" [(ngModel)]="bdgtQuery">
+                </div>
+                <table class="table table-hover table-fixed">
+                  <thead>
+                  <tr>
+                      <th>#</th>
+                    <th>Code</th>
+                    <th>Line Item</th>
+                    <th>Cost</th>
+                    <th>Action</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let  item of arraylist  | paginate: { itemsPerPage: 5, currentPage: p } ">
+                    <td>{{item.__rowNum__}}</td>
+                    <td>
+                      <input type="text"    [(ngModel)]="item.budget_code" >
+                    </td>
+                    <td>
+                      <input type="text"    [(ngModel)]="item.budget_line_item" >
+                    </td>
+                    <td>
+                      <input type="text"    [(ngModel)]="item.amount" >
+                    </td>
+                  </tr>
+
+                  </tbody>
+
+                </table>
+                <pagination-controls (pageChange)="p = $event"> </pagination-controls>
+                <div  class=" footer d-flex flex-md-row justify-content-center">
+                  <button class="closs cancel" data-dismiss="modal" aria-label="Close">Cancel</button>
+                  <button type="submit"  class="submit" id="next2" (click)="createBudget( )">Upload Budget</button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!--Purge Budget By Ministry-->
+<div class="modal fade bd-example-modal-lg " id="purgeministryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg " role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"> Purge Budget By Ministry</h5>
+        <a class=" btn-close" data-dismiss="modal" aria-label="Close"></a>
+      </div>
+      <div class="modal-body d-flex flex-column p-5">
+
+          <div class="d-flex flex-column">
+            <label for="">Select Ministry</label>
+            <select name="selectMda" id="" class="form-select" [(ngModel)]="selectMda">
+              <option *ngFor="let item of mdasList" [value]="item.id">{{item.name}}</option>
+            </select>
+          </div>
+
+          <div class="footer">
+            <button class="closs cancel" data-dismiss="modal" aria-label="Close">Cancel</button>
+            <button   class="submit" style="background :#4CAF50"  (click)="purgeByMinistry()">Delete</button>
+          </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!--purgeministryReleaseModal-->
+<div class="modal fade bd-example-modal-lg" id="purgeministryReleaseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg " role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"> Purge Release By Ministry</h5>
+        <a class=" btn-close" data-dismiss="modal" aria-label="Close"></a>
+      </div>
+      <div class="modal-body d-flex flex-column p-5">
+
+        <div class="d-flex flex-column">
+          <label for="">Select Ministry</label>
+          <select name="" id="" class="form-select" [(ngModel)]="selectedMda">
+            <option [value]="item.id" *ngFor="let item of mdasList">{{item.name}}</option>
+          </select>
+        </div>
+        <div class="d-flex flex-column">
+          <label>Select Year</label>
+          <select class="selectOption" [(ngModel)]="activeYear">
+
+            <option [value]="item" *ngFor="let item of years">{{item}}</option>
+          </select>
+
+        </div>
+        <div class="footer">
+          <button class="closs cancel" data-dismiss="modal" aria-label="Close">Cancel</button>
+          <button   class="submit" style="background :#4CAF50"  (click)="purgeByMinistryRelease()">Delete</button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!--Purge By Year-->
+
+<div class="modal fade" id="purgeyearModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Purge By Year</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <h5 > Are you sure,You want to delete this  budget for year {{activeYear}} </h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn  btn-danger" data-dismiss="modal">Close</button>
+        <button type="button" class="btn  btn-success"  (click)="purgeByYear()">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Purge Release By Year-->
+<div class="modal fade" id="purgeyearReleaseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Purge Release By Year</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5 > Are you sure,You want to delete this  release for year {{activeYear}} </h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn  btn-danger" data-dismiss="modal">Close</button>
+        <button type="button" class="btn  btn-success"  (click)="purgeReleaseByYear()">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Delete Budget Modal-->
+
+
+<div class="modal fade" id="delbudgetModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Delete Budget</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure,You want to delete this  budget.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn  btn-danger" data-dismiss="modal">Close</button>
+        <button type="button" class="btn  btn-success"  (click)="deleteBudget()">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editBudgetModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Edit Budget</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>{{editableBudget?.budget_line_item}}</p>
+        <form [formGroup]="editForm">
+          <div class="form-group">
+            <label for="budget_line_item">Budget Line Item</label>
+            <input type="text" name="budget_line_item" id="budget_line_item" formControlName="budget_line_item" class="form-control">
+            <p class="mb-0" *ngIf="submitEditFormDataStatus && eb['budget_line_item'].errors"><small class="text-danger">This field is required</small></p>
+          </div>
+          <div class="form-group">
+            <label for="budget_code">Budget Code</label>
+            <input type="text" name="budget_code" id="budget_code" formControlName="budget_code" class="form-control">
+            <p class="mb-0" *ngIf="submitEditFormDataStatus && eb['budget_code'].errors"><small class="text-danger">This field is required</small></p>
+          </div>
+          <div class="form-group">
+            <label for="amount">Amount</label>
+            <input type="number" name="amount" id="amount" formControlName="amount" class="form-control">
+            <p class="mb-0" *ngIf="submitEditFormDataStatus && eb['amount'].errors"><small class="text-danger">This field is required</small></p>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success"  (click)="updateBudget()">Submit Update</button>
+      </div>
+    </div>
+  </div>
+</div>

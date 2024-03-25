@@ -1,0 +1,59 @@
+.model-styl{
+  min-width:650px !important;
+  background:#FFFFFF;
+}
+.model-headStyl{
+  border:none!important;
+}
+.btn-Close{
+  background: none;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+}
+.contract-btn{
+  position: relative;
+  left: 100px;
+  background: green;
+}
+
+.close-btn{
+  width:125px;
+  position: relative;
+  left: 20px;
+  background:  none;
+}
+
+
+:host ::ng-deep .p-multiselect {
+  width: 100%;
+  z-index: 2;
+}
+
+:host ::ng-deep .multiselect-custom-virtual-scroll .p-multiselect {
+  width: 100%;
+  z-index: 2;
+}
+
+:host ::ng-deep .multiselect-custom
+:host ::ng-deep .multiselect-custom .p-multiselect-label {
+      padding-top: .25rem;
+      padding-bottom: .25rem;
+  }
+
+:host ::ng-deep .multiselect-custom .country-item-value {
+      padding: .25rem .5rem;
+      border-radius: 3px;
+      display: inline-flex;
+      margin-right: .5rem;
+      background-color: var(--primary-color);
+      color: var(--primary-color-text);
+}
+
+:host ::ng-deep .multiselect-custom img.flag {
+  width: 17px;
+}
+
+:host ::ng-deep .multiselect-custom .country-placeholder {
+    padding: 0.25rem;
+}

@@ -1,0 +1,31 @@
+<div class="modal-header">
+  <h5 style="display: block" class="modal-title">Move output</h5>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<form (ngSubmit)="move()">
+  <div class="modal-body">
+    <div class="reg mt-4 mb-4" action="">
+
+      <p>Output: {{data.title}}</p> <br>
+
+      <!-- <p>{{data.title}} <span class="text-danger" (click)="change = !change"><em>change</em></span></p> -->
+      <div class="form-group">
+        <select name="indicatorId" class="custom-select" [(ngModel)]="postData.indicatorId" #indicatorId="ngModel">
+          <option *ngFor="let item of indicators" value="{{item.id}}">{{item.title}}</option>
+        </select>
+
+        <div *ngIf="indicatorId.invalid && (indicatorId.dirty || indicatorId.touched)" class="error">
+          <div *ngIf="indicatorId.errors.required">
+            <p> <img src="assets/img/error.svg" width="0.9375rem" alt=""> &nbsp; Indicator is required.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-success">Save</button>
+  </div>
+</form>

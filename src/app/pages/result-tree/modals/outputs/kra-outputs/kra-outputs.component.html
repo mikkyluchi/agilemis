@@ -1,0 +1,81 @@
+<div class="modal-header">
+  <h4 class="modal-title">
+    KRA parameters for {{type}}: {{data?.title}}</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<form (ngSubmit)="create()" #newForm="ngForm">
+  <div class="modal-body">
+    <div class="reg mt-4 mb-4" action="">
+
+
+
+      <div class="form-group">
+        <label for="">Result Baseline</label>
+        <input type="number" class="form-control" required placeholder="Baseline" [(ngModel)]="postData.baseline"
+          id="baseline" name="baseline" #baseline="ngModel">
+        <!-- <small id="emailHelp" class="form-number number-muted">We'll never share your email with anyone else.</small> -->
+        <div *ngIf="baseline.invalid && (baseline.dirty || baseline.touched)" class="error">
+          <div *ngIf="baseline.errors.required">
+            <p> <img src="assets/img/error.svg" width="0.9375rem" alt=""> &nbsp; Baseline is required.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group mt-3">
+        <label for="">Result Target</label>
+        <input type="number" class="form-control" required placeholder="target" [(ngModel)]="postData.target"
+          id="target" name="target" #target="ngModel">
+        <!-- <small id="emailHelp" class="form-number number-muted">We'll never share your email with anyone else.</small> -->
+        <div *ngIf="target.invalid && (target.dirty || target.touched)" class="error">
+          <div *ngIf="target.errors.required">
+            <p> <img src="assets/img/error.svg" width="0.9375rem" alt=""> &nbsp; Target is required.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="">Financial Baseline</label>
+        <input type="number" class="form-control" required placeholder="Baseline" [(ngModel)]="postData.fbaseline"
+          id="fbaseline" name="fbaseline" #fbaseline="ngModel">
+        <!-- <small id="emailHelp" class="form-number number-muted">We'll never share your email with anyone else.</small> -->
+        <div *ngIf="fbaseline.invalid && (fbaseline.dirty || fbaseline.touched)" class="error">
+          <div *ngIf="fbaseline.errors.required">
+            <p> <img src="assets/img/error.svg" width="0.9375rem" alt=""> &nbsp; Financial Baseline is required.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group mt-3">
+        <label for="">Financial Target</label>
+        <input type="number" class="form-control" required placeholder="target" [(ngModel)]="postData.ftarget"
+          id="ftarget" name="ftarget" #ftarget="ngModel">
+        <!-- <small id="emailHelp" class="form-number number-muted">We'll never share your email with anyone else.</small> -->
+        <div *ngIf="ftarget.invalid && (ftarget.dirty || ftarget.touched)" class="error">
+          <div *ngIf="ftarget.errors.required">
+            <p> <img src="assets/img/error.svg" width="0.9375rem" alt=""> &nbsp; Financial Target is required.</p>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- <div class="form-group">
+            <label for="exampleInputPassword1">Sector's hub</label>
+          <select (change)="setState()"  class="form-control" required id="exampleFormControlSelect1" style="border-radius: 0 !important" [(ngModel)]="postData.hub" id ="state" name="project"  #project="ngModel">
+            <option disabled>Select project</option>
+            <option  *ngFor="let d of hub; let i = index" [value]="d._id">{{d.name}}</option>
+          
+          </select>
+          <div *ngIf="project.invalid && (project.dirty || project.touched)" class="error">
+              <div *ngIf="project.errors.required">
+                <p> <img src="assets/img/error.svg" width="0.9375rem" alt=""> &nbsp; Hub is required.</p>
+              </div>
+            </div>
+        </div> -->
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" [disabled]="!newForm.form.valid" class="btn submit">Save</button>
+  </div>
+</form>

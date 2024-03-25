@@ -1,0 +1,152 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Test Upload Activities</h5>
+    <a class="btn-close" (click)="activeModal.hide()"></a>
+  </div>
+  <div class="modal-body">
+    <div>
+      <div class="col-md-6 form-group">
+        <label for="" class="form-label">Select State *</label>
+          <select [(ngModel)]="state_id" class="form-select" (change)="setLGAS()">
+            <option *ngFor="let item of states" [value]="item.id">{{item.title}}</option>
+          </select>
+      </div>
+      <div class="col-md-6 form-group">
+        <label for="" class="form-label">Select LGA *</label>
+          <select [(ngModel)]="lga_id" class="form-select">
+            <option *ngFor="let item of selectedState?.lgas" [value]="item.id">{{item.title}}</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="" class="form-label">Select Project XLSX Files to Upload *</label>
+          <input type="file" (change)="onfilechange($event)" multiple="false" name="file-name" id="file-name" class="form-control" readonly="readonly" accept=".csv, .xlsx, .xls"/>
+          <span style="position: relative; right: 355px; top: 14px">{{fileName}}</span>
+        </div>
+    </div>
+
+        <div class="container" *ngIf="projectData?.length > 0">
+          <div class="row">
+            <!-- <div class="col-md-12">
+              <div *ngIf="mdas">
+                <span><b>Ministry</b> </span>{{ mdas[0]?.name }}
+              </div>
+            </div> -->
+            <div class="col-md-12">
+              <div>
+                <span><b>File Name</b></span>{{ fileName }}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="table-responsive pb-5">
+              <table class="table table-hover table-fixed mb-5">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>plan_id</th>
+                    <th>output_id</th>
+                    <th>category_id</th>
+                    <th>title</th>
+                    <th>description</th>
+                    <th>currency_type</th>
+                    <th>cost</th>
+                    <th>status</th>
+                    <th>level_of_completion</th>
+                    <th>location</th>
+                    <th>latitude</th>
+                    <th>longitude</th>
+                    <th>funding_source</th>
+                    <th>start_date</th>
+                    <th>end_date</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr *ngFor="let item of projectData; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>
+                      <select [(ngModel)]="item.plan_id" class="form-select" style="width: 150px;">
+                        <option *ngFor="let item of plans" [value]="item.id">{{item.school}}</option>
+                      </select>
+                    </td>
+                    <td>
+                      <div style="width: 300px;" class="form-group">
+                        <p-multiSelect [options]="outputs" [(ngModel)]="item.outputs" optionLabel="title" optionValue="id" [virtualScroll]="true" [virtualScrollItemSize]="30"></p-multiSelect>
+                      </div>
+                    </td>
+                    <td>
+                      <select [(ngModel)]="item.category_id" class="form-select" style="width: 150px;">
+                        <option *ngFor="let item of categories" [value]="item.id">{{item.title}}</option>
+                      </select>
+                    </td>
+                    <td>
+                      <input type="text" [(ngModel)]="item.title" class="form-control" style="width: 150px;"/>
+                    </td>
+                    <td>
+                      <input type="text" [(ngModel)]="item.description" class="form-control" style="width: 150px;"/>
+                    </td>
+                    <td>
+                      <select [(ngModel)]="item.currency_type" class="form-select" style="width: 150px;">
+                        <option value="Naira">Naira</option>
+                        <option value="Dollar">Dollar</option>
+                      </select>
+                    </td>
+                    <td>
+                      <input type="text" class="form-control" [(ngModel)]="item.cost" disabled/>
+                    </td>
+                    <td>
+                      <select [(ngModel)]="item.status" class="form-select" style="width: 150px;">
+                        <option value="Not Started">Not Started</option>
+                        <option value="On Track">On Track</option>
+                        <option value="Below Track">Below Track</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Abandoned">Abandoned</option>
+                      </select>
+                    </td>
+                    <td>
+                      <input type="text" [(ngModel)]="item.level_of_completion" class="form-control"/>
+                    </td>
+                    <td>
+                      <input type="text" [(ngModel)]="item.location" class="form-control"/>
+                    </td>
+                    <td>
+                      <input type="text" [(ngModel)]="item.longitude" class="form-control"/>
+                    </td>
+                    <td>
+                      <input type="text" [(ngModel)]="item.latitude" class="form-control"/>
+                    </td>
+                    <td>
+                      <input type="text" [(ngModel)]="item.funding_source" class="form-control"/>
+                    </td>
+                    <td>
+                      <input type="text" [(ngModel)]="item.start_date" class="form-control"/>
+                    </td>
+                    <td>
+                      <input type="text" [(ngModel)]="item.end_date" class="form-control"/>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button
+                class="btn btn-lg btn-secondary mx-2"
+                data-dismiss="modal"
+                aria-label="Close"
+                (click)="activeModal.hide()"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                class="btn-lg btn btn-success mx-2"
+                id="nexts2"
+                (click)="createProject()"
+              >
+                Upload Activities
+              </button>
+            </div>
+          </div>
+        </div>
+  </div>
+</div>

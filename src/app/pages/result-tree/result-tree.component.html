@@ -1,0 +1,697 @@
+<div class="d-flex justify-content-between">
+  <div class="col-2 form-group my-4">
+      <select class="form-select form-select-sm" name="treeType" id="treeType" [(ngModel)]="treeType" (change)="pullTree()">
+        <option value="" selected disabled>Change Result Tree</option>
+        <option value="Component">Component Base Result Tree</option>
+        <option value="PDO">PDO Base Result Tree</option>
+      </select>
+  </div>
+  <div class="btn-group my-3 float-right" role="group" aria-label="Basic example">
+    <button type="button" class="btn btn-sm btn-outline-primary"
+      [ngClass]="{'bg-primary text-white': structureView === 'horizontal'}" (click)="structureView = 'horizontal'">
+      Horizontal View
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-primary"
+      [ngClass]="{'bg-primary text-white': structureView === 'vertical'}" (click)="structureView = 'vertical'">
+      Vertical View
+    </button>
+  </div>
+</div>
+<section class="sp">
+    <div class="content p-5">
+      <h3>{{currentViewText}}</h3>
+        <div class="py-5" style=" position: relative;">
+          <div class="zoom-btn">
+            <div class="btn-group-vertical">
+              <button type="button" class="btn btn-primary btn-sm p-3" (click)="zoomIn()"><i class="fas fa-search-plus fa-lg"></i></button>
+              <button type="button" class="btn btn-primary btn-sm p-3" (click)="zoomOut()"><i class="fas fa-search-minus fa-lg"></i></button>
+            </div>
+          </div>
+            <div class="tree" [ngClass]="structureView">
+                <ul>
+                    <li>
+                        <div class="org-box bg-white rel p-4 d-flex align-items-center justify-content-center" id="org_tmp" style="display: inline-block">
+                          <div class="cursor border-end-0" (click)="currentPriorities = ''">
+                            <p style="font-weight: normal;" class="border-end-0">Improved Secondary education oppurtunities among girls in targeted areas in participating states</p>
+                            <div class="my-0 text-center">
+                                <span *ngIf="treeType =='PDO'" (click)="createPDOIndicator()" class="cursor px-4"><img src="assets/icons/add-circle.svg" alt=""> PDO Indicator</span>
+                            </div>
+                            </div>
+                        </div>
+                        <ul *ngIf="projectComponents?.length > 0 && treeType =='Component'">
+                            <li *ngFor="let component of projectComponents; let componentIndex = index;">
+                                <div class="org-box rel priority" id="org_tmp" style="display: inline-block">
+                                    <div class="org-settings col-11 my-0">
+                                        <div class="d-flex justify-content-between px-2 my-0">
+                                            <p class="mb-0"><small>Component</small></p>
+                                            <div class="my-0">
+                                                <span (click)="editComponent(component)" class="cursor"><img src="assets/icons/edit.svg" alt=""></span>
+                                                <!-- <span (click)="createMajorOutcomeIndicator(component)" class="cursor px-4"><img src="assets/icons/add-circle.svg" alt=""></span> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="org-name px-3 cursor my-4" (click)="currentPriorities = ''">
+                                        <p style="font-weight: normal; font-size: .85rem" class="d-block mb-0">{{component?.title}}</p>
+                                    </div>
+                                </div>
+                                <ul *ngIf="component.sub_components?.length > 0">
+                                    <li *ngFor="let sub_component of component.sub_components; let subComponentIndex = index;">
+                                        <div class="org-box rel priority" id="org_tmp" style="display: inline-block">
+                                            <div class="org-settings col-11 my-0">
+                                                <div class="d-flex justify-content-between px-2 my-0">
+                                                    <p class="mb-0"><small>Sub Component</small></p>
+                                                    <div class="my-0">
+                                                        <span (click)="editComponent(sub_component)" class="cursor"><img src="assets/icons/edit.svg" alt=""></span>
+                                                        <span (click)="createMajorOutcomeIndicator(sub_component)" class="cursor px-4"><img src="assets/icons/add-circle.svg" alt=""></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="org-name px-3 cursor my-4">
+                                                <p style="font-weight: normal; font-size: .85rem" class="d-block mb-0">{{sub_component?.title}}</p>
+                                            </div>
+                                        </div>
+                                        <span *ngIf="sub_component.outcomes?.length > 0" class="carret"></span>
+                                        <ul *ngIf="sub_component.outcomes?.length > 0" class="outcome clearfix nested">
+                                            <!-- <li [hidden]="this.filterData(major_outcome?.mda?.id)" *ngFor="let major_outcome of component.outcomes; let i = index; "> -->
+                                            <li *ngFor="let major_outcome of sub_component.outcomes; let i = index; ">
+                                                <!-- <div [ngClass]="{'bad': calcPercentage(major_outcome?.actual,major_outcome?.baseline, major_outcome?.target, major_outcome?.aggregation) == 1, 'medium':calcPercentage(major_outcome?.actual,major_outcome?.baseline, major_outcome?.target, major_outcome?.aggregation)== 2, 'good': calcPercentage(major_outcome?.actual,major_outcome?.baseline, major_outcome?.target, major_outcome?.aggregation) == 3}"class="org-box rel" id="org_tmp" style="padding-bottom: 0px;display: inline-block;"> -->
+                                                <div class="org-box rel" id="org_tmp" style="padding-bottom: 0px;display: inline-block;">
+                                                    <div class="org-settings col-11 my-0">
+                                                        <div class="d-flex justify-content-between px-2 my-0">
+                                                            <p class="mb-0"><small>Outcomes</small></p>
+                                                            <div class="my-0">
+                                                                <span (click)="editMajorOutcome(major_outcome)" class="cursor"><img src="assets/icons/edit.svg" alt=""></span>
+                                                                <span class="dropdown">
+                                                                  <span class="cursor px-4" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="assets/icons/add-circle.svg" alt=""></span>
+                                                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                                    <span class="dropdown-item cursor" (click)="createOutputIndicator(major_outcome)">Output</span>
+                                                                    <span class="dropdown-item cursor" (click)="createOutcomeIndicator(major_outcome)">Sub Outcome</span>
+                                                                  </div>
+                                                                </span>
+                                                                <span [swal]="deleteMOSwal" class="cursor"><img src="assets/icons/trash.svg" alt=""></span>
+                                                                <swal #deleteMOSwal title="Are you sure you want to delete this PDO Indicator?" text="This cannot be undone" type="question" [showCancelButton]="true" [focusCancel]="true" (confirm)="deleteIndicator(major_outcome.id, 'major-outcomes', 'PDO Indicator Indicator')"></swal>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="px-2">
+                                                        <span style="font-weight: normal; font-size: .85rem;">{{major_outcome?.title}}</span>
+                                                    </div>
+                                                    <div class="org-result" *ngIf="major_outcome?.type == 'quantitative'">
+
+                                                        <div class="container-fluid border-top">
+                                                            <div class="row">
+                                                                <div class="col-6 ps-0">
+                                                                    <div class="border-end">
+                                                                        <p class="mb-1">Baseline<span class="ms-4"></span><span *ngIf="major_outcome?.unit_type == 'prefix'">{{major_outcome?.unit}}</span>{{major_outcome?.baseline | shortNumber}}<span *ngIf="major_outcome?.unit_type == 'suffix'">{{major_outcome?.unit}}</span></p>
+                                                                        <p class="mb-0">Targets<span class="ms-4"></span><span *ngIf="major_outcome?.unit_type == 'prefix'">{{major_outcome?.unit}}</span>{{major_outcome?.target | shortNumber}}<span *ngIf="major_outcome?.unit_type == 'suffix'">{{major_outcome?.unit}}</span></p>
+                                                                        <small>Source: {{major_outcome?.data_source}}</small>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-6 text-center">
+                                                                    <p class="mb-0">Actual</p><span *ngIf="major_outcome?.unit_type == 'prefix'">{{major_outcome?.unit}}</span><span class="actual">{{major_outcome?.actual || 0 | shortNumber}}</span><span *ngIf="major_outcome?.unit_type == 'suffix'">{{major_outcome?.unit}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="org-result" *ngIf="major_outcome?.type == 'qualitative'">
+                                                        <div class="container-fluid border-top">
+                                                            <div class="row">
+                                                                <div class="col-6 ps-0">
+                                                                    <div class="border-end">
+                                                                        <p class="mb-1">Baseline <span class="ms-4">{{major_outcome?.baseline}}</span><span *ngIf="major_outcome?.result_type == 'percentage'">%</span></p>
+                                                                        <p class="mb-0">Targets <span class="ms-4">{{major_outcome?.target}}</span><span [hidden]="major_outcome?.result_type != 'percentage'">%</span></p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-6 text-center">
+                                                                    <p class="mb-0">Actual</p>
+                                                                    <span class="actual">{{major_outcome?.status || 'Pending'}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex justify-content-around py-2 active-drill">
+                                                      <span (click)="outcomeDrillDown = 'output'" [ngClass]="{'underline': outcomeDrillDown == 'output'}">Output</span>
+                                                      <span>|</span>
+                                                      <span (click)="outcomeDrillDown = 'sub'" [ngClass]="{'underline': outcomeDrillDown == 'sub'}">Sub-Outcome</span>
+                                                    </div>
+                                                </div>
+                                                <span *ngIf="major_outcome?.outputs?.length > 0 || major_outcome?.sub_outcomes?.length > 0" class="carret"></span>
+                                                <ul *ngIf="major_outcome?.sub_outcomes?.length > 0 && outcomeDrillDown == 'sub'" class="outcome clearfix nested">
+                                                    <li *ngFor="let outcome of major_outcome?.sub_outcomes">
+                                                        <div class="org-box rel" id="org_tmp" style="padding-bottom: 0px;display: inline-block;">
+                                                            <div class="org-settings col-11 my-0">
+                                                                <div class="d-flex justify-content-between px-2 my-0">
+                                                                    <p class="mb-0"><small>Sub Outcome</small></p>
+                                                                    <div class="my-0">
+                                                                        <span (click)="editOutcome(outcome)" class="cursor"><img src="assets/icons/edit.svg" alt=""></span>
+                                                                        <!-- <span (click)="createOutputIndicator(outcome)" class="cursor px-4"><img src="assets/icons/add-circle.svg" alt=""></span> -->
+                                                                        <span [swal]="deleteOISwal" class="cursor px-4"><img src="assets/icons/trash.svg" alt=""></span>
+                                                                        <swal #deleteOISwal title="Are you sure you want to delete this intermediate outcome?" text="This cannot be undone" type="question" [showCancelButton]="true" [focusCancel]="true" (confirm)="deleteIndicator(outcome.id, 'outcomes', 'Outcome Indicator')"></swal>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="px-2">
+                                                                <span style="font-weight: normal; font-size: .85rem;">{{outcome?.title}}</span>
+                                                            </div>
+                                                            <div class="org-result" *ngIf="outcome?.type == 'quantitative'">
+                                                                <div class="container-fluid border-top">
+                                                                    <div class="row">
+                                                                        <div class="col-6 ps-0">
+                                                                            <div class="border-end">
+                                                                                <p class="mb-1">Baseline<span class="ms-4"></span><span *ngIf="outcome?.unit_type == 'prefix'">{{outcome?.unit}}</span>{{outcome?.baseline | shortNumber}}<span *ngIf="outcome?.unit_type == 'suffix'">{{outcome?.unit}}</span></p>
+                                                                                <p class="mb-0">Targets<span class="ms-4"></span><span *ngIf="outcome?.unit_type == 'prefix'">{{outcome?.unit}}</span>{{outcome?.target | shortNumber}}<span *ngIf="outcome?.unit_type == 'suffix'">{{outcome?.unit}}</span></p>
+                                                                                <small>Source: {{outcome?.data_source}}</small>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-6 text-center">
+                                                                            <p class="mb-0">Actual</p>
+                                                                            <span *ngIf="outcome?.unit_type == 'prefix'">{{outcome?.unit}}</span>
+                                                                            <span class="actual">{{outcome?.actual || 0 | shortNumber}}</span>
+                                                                            <span *ngIf="outcome?.unit_type == 'suffix'">{{outcome?.unit}}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="org-result" *ngIf="outcome?.type == 'qualitative'">
+                                                                <div class="container-fluid border-top">
+                                                                    <div class="row">
+                                                                        <div class="col-6 ps-0">
+                                                                            <div class="border-end">
+                                                                                <p class="mb-1">Baseline <span class="ms-4">{{outcome?.baseline}}</span><span *ngIf="outcome?.result_type == 'percentage'">%</span></p>
+                                                                                <p class="mb-0">Targets <span class="ms-4">{{outcome?.target}}</span><span [hidden]="outcome?.result_type != 'percentage'">%</span></p>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-6 text-center">
+                                                                            <p class="mb-0">Actual</p>
+                                                                            <span class="actual">{{outcome?.status || 'Pending'}}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <ul *ngIf="outcome?.sub_outputs?.length > 0">
+                                                            <li *ngFor="let sub_output of outcome?.sub_outputs; let i = index;">
+                                                                <div class="org-box rel" id="org_tmp" style="padding-bottom: 0px;display: inline-block;">
+                                                                    <div class="org-settings col-11 my-0">
+                                                                        <div class="d-flex justify-content-between px-2 my-0">
+                                                                            <p class="mb-0"><small>Sub Output</small></p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="px-2">
+                                                                        <span style="font-weight: normal; font-size: .85rem;">{{sub_output?.title}}</span>
+                                                                    </div>
+                                                                    <div class="org-result" *ngIf="sub_output?.type == 'quantitative'">
+                                                                        <div class="container-fluid border-top">
+                                                                            <div class="row">
+                                                                                <div class="col-6 ps-0">
+                                                                                    <div class="border-end">
+                                                                                        <p class="mb-1">Baseline
+                                                                                            <span class="ms-4"></span>
+                                                                                            <span *ngIf="sub_output?.unit_type == 'prefix'">{{sub_output?.unit}}</span>
+                                                                                            {{sub_output?.baseline | shortNumber}}
+                                                                                            <span *ngIf="sub_output?.unit_type == 'suffix'">{{sub_output?.unit}}</span>
+                                                                                        </p>
+                                                                                        <p class="mb-0">Targets
+                                                                                            <span class="ms-4"></span>
+                                                                                            <span *ngIf="sub_output?.unit_type == 'prefix'">{{sub_output?.unit}}</span>
+                                                                                            {{sub_output?.target | shortNumber}}
+                                                                                            <span *ngIf="sub_output?.unit_type == 'suffix'">{{sub_output?.unit}}</span>
+                                                                                        </p>
+                                                                                        <small>Source: {{sub_output?.data_source}}</small>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-6 text-center">
+                                                                                    <p class="mb-0">Actual</p>
+                                                                                    <span *ngIf="sub_output?.unit_type == 'prefix'">{{sub_output?.unit}}</span>
+                                                                                    <span class="actual">{{sub_output?.actual || 0 | shortNumber}}</span>
+                                                                                    <span *ngIf="sub_output?.unit_type == 'suffix'">{{sub_output?.unit}}</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="org-result" *ngIf="sub_output?.type == 'qualitative'">
+                                                                        <div class="container-fluid border-top">
+                                                                            <div class="row">
+                                                                                <div class="col-6 ps-0">
+                                                                                    <div class="border-end">
+                                                                                        <p class="mb-1">Baseline <span class="ms-4">{{sub_output?.baseline}}</span><span *ngIf="sub_output?.result_type == 'percentage'">%</span></p>
+                                                                                        <p class="mb-0">Targets <span class="ms-4">{{sub_output?.target}}</span><span [hidden]="sub_output?.result_type != 'percentage'">%</span></p>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-6 text-center">
+                                                                                    <p class="mb-0">Actual</p>
+                                                                                    <span class="actual">{{sub_output?.status || 'Pending'}}</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                                <ul *ngIf="major_outcome?.outputs?.length > 0 && outcomeDrillDown == 'output'" class="nested">
+                                                    <li *ngFor="let output of major_outcome?.outputs; let i = index;">
+                                                        <div class="org-box rel" id="org_tmp" style="padding-bottom: 0px;display: inline-block;">
+                                                            <div class="org-settings col-11 my-0">
+                                                                <div class="d-flex justify-content-between px-2 my-0">
+                                                                    <p class="mb-0"><small>Output</small></p>
+                                                                    <div class="my-0">
+                                                                        <span (click)="editOutput(output)" class="cursor"><img src="assets/icons/edit.svg" alt=""></span>
+                                                                        <span (click)="createSubOutputIndicator(output)" class="cursor px-4"><img src="assets/icons/add-circle.svg" alt=""></span>
+                                                                        <span [swal]="deleteOPISwal" class="cursor"><img src="assets/icons/trash.svg" alt=""></span>
+                                                                        <swal #deleteOPISwal title="Are you sure you want to delete this output?" text="This cannot be undone" type="question" [showCancelButton]="true" [focusCancel]="true" (confirm)="deleteIndicator(output.id, 'outputs', 'Output Indicator')"></swal>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="px-2">
+                                                                <span style="font-weight: normal; font-size: .85rem;">{{output?.title}}</span>
+                                                            </div>
+                                                            <div class="org-result" *ngIf="output?.type == 'quantitative'">
+                                                                <div class="container-fluid border-top">
+                                                                    <div class="row">
+                                                                        <div class="col-6 ps-0">
+                                                                            <div class="border-end">
+                                                                                <p class="mb-1">Baseline
+                                                                                    <span class="ms-4"></span>
+                                                                                    <span *ngIf="output?.unit_type == 'prefix'">{{output?.unit}}</span>
+                                                                                    {{output?.baseline | shortNumber}}
+                                                                                    <span *ngIf="output?.unit_type == 'suffix'">{{output?.unit}}</span>
+                                                                                </p>
+                                                                                <p class="mb-0">Targets
+                                                                                    <span class="ms-4"></span>
+                                                                                    <span *ngIf="output?.unit_type == 'prefix'">{{output?.unit}}</span>
+                                                                                    {{output?.target | shortNumber}}
+                                                                                    <span *ngIf="output?.unit_type == 'suffix'">{{output?.unit}}</span>
+                                                                                </p>
+                                                                                <small>Source: {{output?.data_source}}</small>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-6 text-center">
+                                                                            <p class="mb-0">Actual</p>
+                                                                            <span *ngIf="output?.unit_type == 'prefix'">{{output?.unit}}</span>
+                                                                            <span class="actual">{{output?.actual || 0 | shortNumber}}</span>
+                                                                            <span *ngIf="output?.unit_type == 'suffix'">{{output?.unit}}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="org-result" *ngIf="output?.type == 'qualitative'">
+                                                                <div class="container-fluid border-top">
+                                                                    <div class="row">
+                                                                        <div class="col-6 ps-0">
+                                                                            <div class="border-end">
+                                                                                <p class="mb-1">Baseline <span class="ms-4">{{output?.baseline}}</span><span *ngIf="output?.result_type == 'percentage'">%</span></p>
+                                                                                <p class="mb-0">Targets <span class="ms-4">{{output?.target}}</span><span [hidden]="output?.result_type != 'percentage'">%</span></p>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-6 text-center">
+                                                                            <p class="mb-0">Actual</p>
+                                                                            <span class="actual">{{output?.status || 'Pending'}}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <ul *ngIf="output?.sub_outputs?.length > 0">
+                                                            <li *ngFor="let sub_output of output?.sub_outputs; let i = index;">
+                                                                <div class="org-box rel" id="org_tmp" style="padding-bottom: 0px;display: inline-block;">
+                                                                    <div class="org-settings col-11 my-0">
+                                                                        <div class="d-flex justify-content-between px-2 my-0">
+                                                                            <p class="mb-0"><small>Sub Output</small></p>
+                                                                            <div class="my-0">
+                                                                                <span (click)="editSubOutput(sub_output)" class="cursor pe-4"><img src="assets/icons/edit.svg" alt=""></span>
+                                                                                <span [swal]="deleteOPISwal" class="cursor"><img src="assets/icons/trash.svg" alt=""></span>
+                                                                                <swal #deleteOPISwal title="Are you sure you want to delete this sub output?" text="This cannot be undone" type="question" [showCancelButton]="true" [focusCancel]="true" (confirm)="deleteIndicator(sub_output.id, 'sub-outputs', 'Sub Output Indicator')"></swal>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="px-2">
+                                                                        <span style="font-weight: normal; font-size: .85rem;">{{sub_output?.title}}</span>
+                                                                    </div>
+                                                                    <div class="org-result" *ngIf="sub_output?.type == 'quantitative'">
+                                                                        <div class="container-fluid border-top">
+                                                                            <div class="row">
+                                                                                <div class="col-6 ps-0">
+                                                                                    <div class="border-end">
+                                                                                        <p class="mb-1">Baseline
+                                                                                            <span class="ms-4"></span>
+                                                                                            <span *ngIf="sub_output?.unit_type == 'prefix'">{{sub_output?.unit}}</span>
+                                                                                            {{sub_output?.baseline | shortNumber}}
+                                                                                            <span *ngIf="sub_output?.unit_type == 'suffix'">{{sub_output?.unit}}</span>
+                                                                                        </p>
+                                                                                        <p class="mb-0">Targets
+                                                                                            <span class="ms-4"></span>
+                                                                                            <span *ngIf="sub_output?.unit_type == 'prefix'">{{sub_output?.unit}}</span>
+                                                                                            {{sub_output?.target | shortNumber}}
+                                                                                            <span *ngIf="sub_output?.unit_type == 'suffix'">{{sub_output?.unit}}</span>
+                                                                                        </p>
+                                                                                        <small>Source: {{sub_output?.data_source}}</small>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-6 text-center">
+                                                                                    <p class="mb-0">Actual</p>
+                                                                                    <span *ngIf="sub_output?.unit_type == 'prefix'">{{sub_output?.unit}}</span>
+                                                                                    <span class="actual">{{sub_output?.actual || 0 | shortNumber}}</span>
+                                                                                    <span *ngIf="sub_output?.unit_type == 'suffix'">{{sub_output?.unit}}</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="org-result" *ngIf="sub_output?.type == 'qualitative'">
+                                                                        <div class="container-fluid border-top">
+                                                                            <div class="row">
+                                                                                <div class="col-6 ps-0">
+                                                                                    <div class="border-end">
+                                                                                        <p class="mb-1">Baseline <span class="ms-4">{{sub_output?.baseline}}</span><span *ngIf="sub_output?.result_type == 'percentage'">%</span></p>
+                                                                                        <p class="mb-0">Targets <span class="ms-4">{{sub_output?.target}}</span><span [hidden]="sub_output?.result_type != 'percentage'">%</span></p>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-6 text-center">
+                                                                                    <p class="mb-0">Actual</p>
+                                                                                    <span class="actual">{{sub_output?.status || 'Pending'}}</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <ul *ngIf="pdoTree?.length > 0 && treeType =='PDO'">
+                            <li *ngFor="let major_outcome of pdoTree; let componentIndex = index;">
+                                <div class="org-box rel priority" id="org_tmp" style="padding-bottom: 0px;display: inline-block;">
+                                  <div class="org-settings col-11 my-0">
+                                      <div class="d-flex justify-content-between px-2 my-0">
+                                          <p class="mb-0"><small>PDO Indicators</small></p>
+                                          <div class="my-0">
+                                              <span (click)="editPDOIndicator(major_outcome)" class="cursor"><img src="assets/icons/edit.svg" alt=""></span>
+                                              <span class="cursor px-4" (click)="createSubPDOIndicator(major_outcome)"><img src="assets/icons/add-circle.svg" alt=""></span>
+                                              <span [swal]="deleteMOSwal" class="cursor"><img src="assets/icons/trash.svg" alt=""></span>
+                                              <swal #deleteMOSwal title="Are you sure you want to delete this PDO Indicator?" text="This cannot be undone" type="question" [showCancelButton]="true" [focusCancel]="true" (confirm)="deleteIndicator(major_outcome.id, 'pdo-indicators', 'PDO Indicator Indicator')"></swal>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="px-2">
+                                      <span style="font-weight: normal; font-size: .85rem;">{{major_outcome?.title}}</span>
+                                  </div>
+                                  <div class="org-result" *ngIf="major_outcome?.type == 'quantitative'">
+
+                                      <div class="container-fluid border-top">
+                                          <div class="row">
+                                              <div class="col-6 ps-0">
+                                                  <div class="border-end">
+                                                      <p class="mb-1">Baseline<span class="ms-4"></span><span *ngIf="major_outcome?.unit_type == 'prefix'">{{major_outcome?.unit}}</span>{{major_outcome?.baseline | shortNumber}}<span *ngIf="major_outcome?.unit_type == 'suffix'">{{major_outcome?.unit}}</span></p>
+                                                      <p class="mb-0">Targets<span class="ms-4"></span><span *ngIf="major_outcome?.unit_type == 'prefix'">{{major_outcome?.unit}}</span>{{major_outcome?.target | shortNumber}}<span *ngIf="major_outcome?.unit_type == 'suffix'">{{major_outcome?.unit}}</span></p>
+                                                      <small>Source: {{major_outcome?.data_source}}</small>
+                                                  </div>
+                                              </div>
+                                              <div class="col-6 text-center">
+                                                  <p class="mb-0">Actual</p><span *ngIf="major_outcome?.unit_type == 'prefix'">{{major_outcome?.unit}}</span><span class="actual">{{major_outcome?.actual || 0 | shortNumber}}</span><span *ngIf="major_outcome?.unit_type == 'suffix'">{{major_outcome?.unit}}</span>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="org-result" *ngIf="major_outcome?.type == 'qualitative'">
+                                      <div class="container-fluid border-top">
+                                          <div class="row">
+                                              <div class="col-6 ps-0">
+                                                  <div class="border-end">
+                                                      <p class="mb-1">Baseline <span class="ms-4">{{major_outcome?.baseline}}</span><span *ngIf="major_outcome?.result_type == 'percentage'">%</span></p>
+                                                      <p class="mb-0">Targets <span class="ms-4">{{major_outcome?.target}}</span><span [hidden]="major_outcome?.result_type != 'percentage'">%</span></p>
+                                                  </div>
+                                              </div>
+                                              <div class="col-6 text-center">
+                                                  <p class="mb-0">Actual</p>
+                                                  <span class="actual">{{major_outcome?.status || 'Pending'}}</span>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="d-flex justify-content-around py-2 active-drill">
+                                    <span (click)="outcomeDrillDown = 'output'" [ngClass]="{'underline': outcomeDrillDown == 'output'}">Output</span>
+                                    <span>|</span>
+                                    <span (click)="outcomeDrillDown = 'sub'" [ngClass]="{'underline': outcomeDrillDown == 'sub'}">Sub-Outcome</span>
+                                  </div>
+                                </div>
+                                <span *ngIf="major_outcome?.outputs?.length > 0 || major_outcome?.sub_pdo_indicators?.length > 0" class="carret"></span>
+                                <ul *ngIf="major_outcome?.sub_pdo_indicators?.length > 0 && outcomeDrillDown == 'sub'" class="outcome clearfix nested">
+                                    <li *ngFor="let outcome of major_outcome?.sub_pdo_indicators">
+                                        <div class="org-box rel" id="org_tmp" style="padding-bottom: 0px;display: inline-block;">
+                                            <div class="org-settings col-11 my-0">
+                                                <div class="d-flex justify-content-between px-2 my-0">
+                                                    <p class="mb-0"><small>Sub PDO Indicator</small></p>
+                                                    <div class="my-0">
+                                                        <span (click)="editSubPDOIndicator(outcome)" class="cursor"><img src="assets/icons/edit.svg" alt=""></span>
+                                                        <!-- <span (click)="createOutputIndicator(outcome)" class="cursor px-4"><img src="assets/icons/add-circle.svg" alt=""></span> -->
+                                                        <span [swal]="deleteOISwal" class="cursor"><img src="assets/icons/trash.svg" alt=""></span>
+                                                        <swal #deleteOISwal title="Are you sure you want to delete this intermediate outcome?" text="This cannot be undone" type="question" [showCancelButton]="true" [focusCancel]="true" (confirm)="deleteIndicator(outcome.id, 'outcomes', 'Outcome Indicator')"></swal>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="px-2">
+                                                <span style="font-weight: normal; font-size: .85rem;">{{outcome?.title}}</span>
+                                            </div>
+                                            <div class="org-result" *ngIf="outcome?.type == 'quantitative'">
+                                                <div class="container-fluid border-top">
+                                                    <div class="row">
+                                                        <div class="col-6 ps-0">
+                                                            <div class="border-end">
+                                                                <p class="mb-1">Baseline<span class="ms-4"></span><span *ngIf="outcome?.unit_type == 'prefix'">{{outcome?.unit}}</span>{{outcome?.baseline | shortNumber}}<span *ngIf="outcome?.unit_type == 'suffix'">{{outcome?.unit}}</span></p>
+                                                                <p class="mb-0">Targets<span class="ms-4"></span><span *ngIf="outcome?.unit_type == 'prefix'">{{outcome?.unit}}</span>{{outcome?.target | shortNumber}}<span *ngIf="outcome?.unit_type == 'suffix'">{{outcome?.unit}}</span></p>
+                                                                <small>Source: {{outcome?.data_source}}</small>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6 text-center">
+                                                            <p class="mb-0">Actual</p>
+                                                            <span *ngIf="outcome?.unit_type == 'prefix'">{{outcome?.unit}}</span>
+                                                            <span class="actual">{{outcome?.actual || 0 | shortNumber}}</span>
+                                                            <span *ngIf="outcome?.unit_type == 'suffix'">{{outcome?.unit}}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="org-result" *ngIf="outcome?.type == 'qualitative'">
+                                                <div class="container-fluid border-top">
+                                                    <div class="row">
+                                                        <div class="col-6 ps-0">
+                                                            <div class="border-end">
+                                                                <p class="mb-1">Baseline <span class="ms-4">{{outcome?.baseline}}</span><span *ngIf="outcome?.result_type == 'percentage'">%</span></p>
+                                                                <p class="mb-0">Targets <span class="ms-4">{{outcome?.target}}</span><span [hidden]="outcome?.result_type != 'percentage'">%</span></p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6 text-center">
+                                                            <p class="mb-0">Actual</p>
+                                                            <span class="actual">{{outcome?.status || 'Pending'}}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <ul *ngIf="outcome?.sub_outputs?.length > 0">
+                                            <li *ngFor="let sub_output of outcome?.sub_outputs; let i = index;">
+                                                <div class="org-box rel" id="org_tmp" style="padding-bottom: 0px;display: inline-block;">
+                                                    <div class="org-settings col-11 my-0">
+                                                        <div class="d-flex justify-content-between px-2 my-0">
+                                                            <p class="mb-0"><small>Sub Output</small></p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="px-2">
+                                                        <span style="font-weight: normal; font-size: .85rem;">{{sub_output?.title}}</span>
+                                                    </div>
+                                                    <div class="org-result" *ngIf="sub_output?.type == 'quantitative'">
+                                                        <div class="container-fluid border-top">
+                                                            <div class="row">
+                                                                <div class="col-6 ps-0">
+                                                                    <div class="border-end">
+                                                                        <p class="mb-1">Baseline
+                                                                            <span class="ms-4"></span>
+                                                                            <span *ngIf="sub_output?.unit_type == 'prefix'">{{sub_output?.unit}}</span>
+                                                                            {{sub_output?.baseline | shortNumber}}
+                                                                            <span *ngIf="sub_output?.unit_type == 'suffix'">{{sub_output?.unit}}</span>
+                                                                        </p>
+                                                                        <p class="mb-0">Targets
+                                                                            <span class="ms-4"></span>
+                                                                            <span *ngIf="sub_output?.unit_type == 'prefix'">{{sub_output?.unit}}</span>
+                                                                            {{sub_output?.target | shortNumber}}
+                                                                            <span *ngIf="sub_output?.unit_type == 'suffix'">{{sub_output?.unit}}</span>
+                                                                        </p>
+                                                                        <small>Source: {{sub_output?.data_source}}</small>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-6 text-center">
+                                                                    <p class="mb-0">Actual</p>
+                                                                    <span *ngIf="sub_output?.unit_type == 'prefix'">{{sub_output?.unit}}</span>
+                                                                    <span class="actual">{{sub_output?.actual || 0 | shortNumber}}</span>
+                                                                    <span *ngIf="sub_output?.unit_type == 'suffix'">{{sub_output?.unit}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="org-result" *ngIf="sub_output?.type == 'qualitative'">
+                                                        <div class="container-fluid border-top">
+                                                            <div class="row">
+                                                                <div class="col-6 ps-0">
+                                                                    <div class="border-end">
+                                                                        <p class="mb-1">Baseline <span class="ms-4">{{sub_output?.baseline}}</span><span *ngIf="sub_output?.result_type == 'percentage'">%</span></p>
+                                                                        <p class="mb-0">Targets <span class="ms-4">{{sub_output?.target}}</span><span [hidden]="sub_output?.result_type != 'percentage'">%</span></p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-6 text-center">
+                                                                    <p class="mb-0">Actual</p>
+                                                                    <span class="actual">{{sub_output?.status || 'Pending'}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                                <ul *ngIf="major_outcome?.outputs?.length > 0 && outcomeDrillDown == 'output'" class="nested">
+                                    <li *ngFor="let output of major_outcome?.outputs; let i = index;">
+                                        <div class="org-box rel" id="org_tmp" style="padding-bottom: 0px;display: inline-block;">
+                                            <div class="org-settings col-11 my-0">
+                                                <div class="d-flex justify-content-between px-2 my-0">
+                                                    <p class="mb-0"><small>Output</small></p>
+                                                    <div class="my-0">
+                                                        <span (click)="editOutput(output)" class="cursor"><img src="assets/icons/edit.svg" alt=""></span>
+                                                        <span (click)="createSubOutputIndicator(output)" class="cursor px-4"><img src="assets/icons/add-circle.svg" alt=""></span>
+                                                        <span [swal]="deleteOPISwal" class="cursor"><img src="assets/icons/trash.svg" alt=""></span>
+                                                        <swal #deleteOPISwal title="Are you sure you want to delete this output?" text="This cannot be undone" type="question" [showCancelButton]="true" [focusCancel]="true" (confirm)="deleteIndicator(output.id, 'outputs', 'Output Indicator')"></swal>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="px-2">
+                                                <span style="font-weight: normal; font-size: .85rem;">{{output?.title}}</span>
+                                            </div>
+                                            <div class="org-result" *ngIf="output?.type == 'quantitative'">
+                                                <div class="container-fluid border-top">
+                                                    <div class="row">
+                                                        <div class="col-6 ps-0">
+                                                            <div class="border-end">
+                                                                <p class="mb-1">Baseline
+                                                                    <span class="ms-4"></span>
+                                                                    <span *ngIf="output?.unit_type == 'prefix'">{{output?.unit}}</span>
+                                                                    {{output?.baseline | shortNumber}}
+                                                                    <span *ngIf="output?.unit_type == 'suffix'">{{output?.unit}}</span>
+                                                                </p>
+                                                                <p class="mb-0">Targets
+                                                                    <span class="ms-4"></span>
+                                                                    <span *ngIf="output?.unit_type == 'prefix'">{{output?.unit}}</span>
+                                                                    {{output?.target | shortNumber}}
+                                                                    <span *ngIf="output?.unit_type == 'suffix'">{{output?.unit}}</span>
+                                                                </p>
+                                                                <small>Source: {{output?.data_source}}</small>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6 text-center">
+                                                            <p class="mb-0">Actual</p>
+                                                            <span *ngIf="output?.unit_type == 'prefix'">{{output?.unit}}</span>
+                                                            <span class="actual">{{output?.actual || 0 | shortNumber}}</span>
+                                                            <span *ngIf="output?.unit_type == 'suffix'">{{output?.unit}}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="org-result" *ngIf="output?.type == 'qualitative'">
+                                                <div class="container-fluid border-top">
+                                                    <div class="row">
+                                                        <div class="col-6 ps-0">
+                                                            <div class="border-end">
+                                                                <p class="mb-1">Baseline <span class="ms-4">{{output?.baseline}}</span><span *ngIf="output?.result_type == 'percentage'">%</span></p>
+                                                                <p class="mb-0">Targets <span class="ms-4">{{output?.target}}</span><span [hidden]="output?.result_type != 'percentage'">%</span></p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6 text-center">
+                                                            <p class="mb-0">Actual</p>
+                                                            <span class="actual">{{output?.status || 'Pending'}}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <span *ngIf="output?.sub_output?.length > 0" class="carret"></span>
+                                        <ul *ngIf="output?.sub_output?.length > 0" class="nested">
+                                            <li *ngFor="let sub_output of output?.sub_output; let i = index;">
+                                                <div class="org-box rel" id="org_tmp" style="padding-bottom: 0px;display: inline-block;">
+                                                    <div class="org-settings col-11 my-0">
+                                                        <div class="d-flex justify-content-between px-2 my-0">
+                                                            <p class="mb-0"><small>Sub Output</small></p>
+                                                            <div class="my-0">
+                                                                <span (click)="editSubOutput(sub_output)" class="cursor pe-4"><img src="assets/icons/edit.svg" alt=""></span>
+                                                                <span [swal]="deleteOPISwal" class="cursor"><img src="assets/icons/trash.svg" alt=""></span>
+                                                                <swal #deleteOPISwal title="Are you sure you want to delete this sub output?" text="This cannot be undone" type="question" [showCancelButton]="true" [focusCancel]="true" (confirm)="deleteIndicator(sub_output.id, 'sub-outputs', 'Sub Output Indicator')"></swal>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="px-2">
+                                                        <span style="font-weight: normal; font-size: .85rem;">{{sub_output?.title}}</span>
+                                                    </div>
+                                                    <div class="org-result" *ngIf="sub_output?.type == 'quantitative'">
+                                                        <div class="container-fluid border-top">
+                                                            <div class="row">
+                                                                <div class="col-6 ps-0">
+                                                                    <div class="border-end">
+                                                                        <p class="mb-1">Baseline
+                                                                            <span class="ms-4"></span>
+                                                                            <span *ngIf="sub_output?.unit_type == 'prefix'">{{sub_output?.unit}}</span>
+                                                                            {{sub_output?.baseline | shortNumber}}
+                                                                            <span *ngIf="sub_output?.unit_type == 'suffix'">{{sub_output?.unit}}</span>
+                                                                        </p>
+                                                                        <p class="mb-0">Targets
+                                                                            <span class="ms-4"></span>
+                                                                            <span *ngIf="sub_output?.unit_type == 'prefix'">{{sub_output?.unit}}</span>
+                                                                            {{sub_output?.target | shortNumber}}
+                                                                            <span *ngIf="sub_output?.unit_type == 'suffix'">{{sub_output?.unit}}</span>
+                                                                        </p>
+                                                                        <small>Source: {{sub_output?.data_source}}</small>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-6 text-center">
+                                                                    <p class="mb-0">Actual</p>
+                                                                    <span *ngIf="sub_output?.unit_type == 'prefix'">{{sub_output?.unit}}</span>
+                                                                    <span class="actual">{{sub_output?.actual || 0 | shortNumber}}</span>
+                                                                    <span *ngIf="sub_output?.unit_type == 'suffix'">{{sub_output?.unit}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="org-result" *ngIf="sub_output?.type == 'qualitative'">
+                                                        <div class="container-fluid border-top">
+                                                            <div class="row">
+                                                                <div class="col-6 ps-0">
+                                                                    <div class="border-end">
+                                                                        <p class="mb-1">Baseline <span class="ms-4">{{sub_output?.baseline}}</span><span *ngIf="sub_output?.result_type == 'percentage'">%</span></p>
+                                                                        <p class="mb-0">Targets <span class="ms-4">{{sub_output?.target}}</span><span [hidden]="sub_output?.result_type != 'percentage'">%</span></p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-6 text-center">
+                                                                    <p class="mb-0">Actual</p>
+                                                                    <span class="actual">{{sub_output?.status || 'Pending'}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+      </div>
+  </section>

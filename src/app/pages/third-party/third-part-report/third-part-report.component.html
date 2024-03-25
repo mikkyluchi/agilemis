@@ -1,0 +1,30 @@
+<div>
+    <div class="mb-4">
+        <span class="page_title px-0">A’illababa Hassan Shehu’s Report on;</span>
+        <p class="mb-0">Name of the project appears hear, then they can click on the arrow to view more, text should not be more than this length</p>
+    </div>
+</div>
+
+<div class="table-responsive p-3">
+    <table class="table bg-white">
+      <thead>
+        <tr>
+          <th>S/N</th>
+          <th width="40%">Title</th>
+          <th>Level of Completion</th>
+          <th>Challenges</th>
+          <th>Recommendations</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="projects">
+        <tr class="cursor" *ngFor="let item of projects; let i = index" [routerLink]="['/view-project', item?.project.id]">
+          <td>{{ i + 1 }}</td>
+          <td width="40%">{{ item?.project?.title }}</td>
+          <td>{{item?.loc}}</td>
+          <td>{{item?.challenges}}</td>
+          <td>{{item?.recommendations}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls *ngIf="false" (pageChange)="getUserByPage((page = $event))"></pagination-controls>
+</div>

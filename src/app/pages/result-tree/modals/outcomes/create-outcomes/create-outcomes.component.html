@@ -1,0 +1,162 @@
+<div class="modal-header">
+  <h4 style="display: block" class="modal-title">Add Sub Outcome Indicator</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form #newForm="ngForm">
+      <div class="row">
+        <div class="col-6">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" required placeholder="Indicator name" [(ngModel)]="postData.title"
+              id="name" name="name" #name="ngModel">
+            <div *ngIf="name.invalid && (name.dirty || name.touched)" class="error">
+              <div *ngIf="name.errors.required">
+                <p> <img src="assets/img/error.svg" width="0.9375rem" alt=""> &nbsp; Indicator name is required.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-group">
+            <label for="type">Type</label>
+            <select class="form-select" required id="type"
+              [(ngModel)]="postData.type" id="type" name="type" #type="ngModel">
+              <option disabled>Select indicator type</option>
+              <option value="qualitative">Qualitative</option>
+              <option value="quantitative">Quantitative</option>
+            </select>
+            <div *ngIf="name.invalid && (name.dirty || name.touched)" class="error">
+              <div *ngIf="name.errors.required">
+                <p> <img src="assets/img/error.svg" width="0.9375rem" alt=""> &nbsp; Indicator type is required.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <div class="form-group">
+            <label for="type">Unit Type</label>
+            <select class="form-select" id="type" [(ngModel)]="postData.unit_type" id="type" name="type" #type="ngModel">
+              <option disabled>Select Unit type</option>
+              <option value="prefix">Prefix</option>
+              <option value="suffix">Suffix</option>
+            </select>
+            <!-- <div *ngIf="name.invalid && (name.dirty || name.touched)" class="error">
+          <div *ngIf="name.errors.required">
+            <p> <img src="assets/img/error.svg" width="0.9375rem" alt=""> &nbsp; Indicator Unit type is required.</p>
+          </div>
+        </div> -->
+          </div>
+        </div>
+        <div class="col-6">
+
+
+          <div class="form-group">
+            <label for="unitInput">Unit</label>
+            <input type="text" class="form-control" placeholder="Indicator Unit" [(ngModel)]="postData.unit"
+              id="unitInput" name="unitInput" #unitInput="ngModel">
+            <!-- <div *ngIf="unitInput.invalid && (unitInput.dirty || unitInput.touched)" class="error">
+          <div *ngIf="unitInput.errors.required">
+            <p> <img src="assets/img/error.svg" width="0.9375rem" alt=""> &nbsp; Indicator unit is required.</p>
+          </div>
+        </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <div class="form-group">
+            <label for="baselineInput">Baseline</label>
+            <input type="text" class="form-control" required placeholder="Indicator Baseline"
+              [(ngModel)]="postData.baseline" id="baselineInput" name="baselineInput" #baselineInput="ngModel">
+            <div *ngIf="baselineInput.invalid && (baselineInput.dirty || baselineInput.touched)" class="error">
+              <div *ngIf="baselineInput.errors.required">
+                <p> <img src="assets/img/error.svg" width="0.9375rem" alt=""> &nbsp; Indicator baseline is required.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-group">
+            <label for="actualInput">Actual</label>
+            <input type="text" class="form-control" placeholder="Actual" [(ngModel)]="postData.actual" id="actualInput"
+              name="actualInput" #actual="ngModel">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <div class="form-group">
+            <label for="targetInput">Target</label>
+            <input type="text" class="form-control" required placeholder="Indicator Target"
+              [(ngModel)]="postData.target" id="targetInput" name="targetInput" #targetInput="ngModel">
+            <div *ngIf="targetInput.invalid && (targetInput.dirty || targetInput.touched)" class="error">
+              <div *ngIf="targetInput.errors.required">
+                <p> <img src="assets/img/error.svg" width="0.9375rem" alt=""> &nbsp; Indicator target is required.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-group">
+            <label for="name">Data source </label>
+            <input type="text" class="form-control" placeholder="Data source "
+              [(ngModel)]="postData.data_source" id="name" name="data_source" #data_source="ngModel">
+            <div *ngIf="data_source.invalid && (data_source.dirty || data_source.touched)" class="error">
+              <div *ngIf="data_source.errors.required">
+                <p> <img src="assets/img/error.svg" width="0.9375rem" alt=""> &nbsp; Indicator data source is required.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <div class="form-group">
+            <label for="aggregation">Aggregation</label>
+            <select class="form-select" required id="exampleFormControlSelect1"
+              [(ngModel)]="postData.aggregation" id="aggregation" name="aggregation" #aggregation="ngModel">
+              <option disabled>Select aggregation type</option>
+              <option value="add(+)"> Add(+)</option>
+              <option value="subtract(-)"> Subtract(-)</option>
+              <option value="multiply(x)"> Multiply(x)</option>
+              <option value="divide(/)"> Divide(/)</option>
+
+            </select>
+            <div *ngIf="aggregation.invalid && (aggregation.dirty || aggregation.touched)" class="error">
+              <div *ngIf="aggregation.errors.required">
+                <p> <img src="assets/img/error.svg" width="0.9375rem" alt=""> &nbsp; Aggregation is required.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-group">
+            <label for="exampleFormControlSelect1">Result type</label>
+            <select class="form-select" required id="exampleFormControlSelect1"
+              [(ngModel)]="postData.result_type" name="result_type" #result_type="ngModel">
+              <option disabled>Select result type</option>
+              <option value="percentage"> Percentage(%)</option>
+              <option value="number"> Number</option>
+              <option value="text"> Text</option>
+
+            </select>
+
+            <div *ngIf="result_type.invalid && (result_type.dirty || result_type.touched)" class="error">
+              <div *ngIf="result_type.errors.required">
+                <p> <img src="assets/img/error.svg" width="0.9375rem" alt=""> &nbsp; Result type is required.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button (click)="create(newForm)" type="submit" [disabled]="!newForm.form.valid" class="btn btn-success px-4">Save</button>
+</div>

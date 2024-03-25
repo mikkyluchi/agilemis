@@ -1,0 +1,33 @@
+.password_error{
+    color:red;
+    padding:7px;
+}
+
+.roletitle_error{
+    color:red;
+    padding:7px;
+}
+
+.selectOption{
+    border-radius: 5px;
+    color:green;
+    border: 1px solid green;
+}
+
+.selectOptionDark{
+    border-radius: 5px;
+    color:#999;
+    border: 1px solid #999;
+    max-width: 150px;
+}
+
+.accordion-button:focus{
+    border: none !important;
+    outline: none !important;
+}
+
+.btn-toggle-class{
+  background-color: #0d6efd;
+  background: #0d6efd;
+  color: #ffffff !important;
+}

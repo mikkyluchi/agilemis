@@ -1,0 +1,54 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">{{ title }}</h5>
+  <a class="btn-close" data-dismiss="modal" aria-label="Close" (click)="activeModal.hide()"></a>
+</div>
+<div class="modal-body">
+  <form [formGroup]="userForm" class="row">
+    <div class="form-group col-md-6">
+      <label for="">Enter User's full name</label>
+      <input class="form-control" type="text" name="name" formControlName="name" />
+    </div>
+    <div class="col-lg-6 form-group">
+      <label for="">Enter User's Email</label>
+      <input class="form-control" type="text" placeholder="lorem@gmail.com" name="email" formControlName="email"/>
+    </div>
+    <div class="col-lg-6 form-group">
+      <label for="">Enter User's Phone</label>
+      <input class="form-control" type="tel" placeholder="08012xxxxxx" name="phone_number" formControlName="phone_number" id="phone_number"/>
+    </div>
+    <div class="form-group col-lg-6">
+      <label for="">Select User's role</label>
+      <select name="role" formControlName="role" class="form-select">
+        <option [ngValue]="null" disabled>Select</option>
+        <option [value]="role.name" *ngFor="let role of allroles">{{ role.name }}</option>
+      </select>
+      <span style="color: red" *ngIf=" userForm.get('role').invalid && (userForm.get('role').dirty || userForm.get('role').touched)">please select any role</span>
+    </div>
+
+    <div class="form-group col-lg-6">
+      <label for="">Select User's State</label>
+      <select name="state" (change)="setLgas($event)" class="form-select">
+        <option selected disabled>Select</option>
+        <option [value]="state.id" *ngFor="let state of states">{{ state.title }}</option>
+      </select>
+    </div>
+
+    <div class="form-group col-lg-6">
+      <label for="">Select User's LGA</label>
+      <select name="lga_id" formControlName="lga_id" class="form-select">
+        <option [ngValue]="null" disabled>Select</option>
+        <option [value]="lga.id" *ngFor="let lga of lgas">{{ lga.title }}</option>
+      </select>
+      <span style="color: red" *ngIf=" userForm.get('lga_id').invalid && (userForm.get('lga_id').dirty || userForm.get('lga_id').touched)">please select any LGA</span>
+    </div>
+
+    <div class="col-lg-6 form-group">
+      <label for="">Enter User's Password</label>
+      <input type="password" class="form-control" placeholder="********" name="password" formControlName="password"/>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-secondary px-4" data-dismiss="modal" aria-label="Close" (click)="resetUserForm(); activeModal.hide()">Cancel</button>
+    <button class="btn btn-success px-4" [disabled]="!userForm.valid" (click)="createUser()">{{ btnText }}</button>
+</div>

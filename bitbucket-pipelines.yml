@@ -1,0 +1,15 @@
+image: atlassian/default-image:2
+
+pipelines:
+  branches:
+    master:
+      - step:
+          name: "Deploy to production"
+          deployment: production
+          # trigger: manual
+          script:
+            - mkdir -p ~/.ssh
+            - cat known_hosts >> ~/.ssh/known_hosts
+            - (umask  077 ; echo $GC_SSH_KEY1 | base64 --decode > ~/.ssh/id_rsa)
+            - cat ./deploy.sh | ssh -tt gbaski@35.209.27.201
+            - echo "Deploy step finished"

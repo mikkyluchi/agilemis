@@ -1,0 +1,19 @@
+<div class="modal-header">
+  <h5 style="display: block" class="modal-title">Edit Component</h5>
+  <span class="close cursor" aria-label="Close" (click)="activeModal.hide()" aria-hidden="true">&times;</span>
+</div>
+<div class="modal-body">
+  <form [formGroup]="mandateForm">
+    <div class="form-group">
+      <label for="name">Title</label>
+      <input type="text" class="form-control" placeholder="Mandate name" id="name" name="name"
+        formControlName="title">
+      <div *ngIf="mandateFormData['title'].invalid && mandateFormData['title'].touched" class="error">
+        <p> <img src="assets/img/error.svg" width="0.9375rem" alt=""> &nbsp; Mandate name is required.</p>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button (click)="create()" type="submit" class="btn btn-success px-4">Save</button>
+</div>

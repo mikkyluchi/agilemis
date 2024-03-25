@@ -1,0 +1,57 @@
+<div id="helptabs">
+    <ul class="nav nav-tabs" id="user-nav-tabs">
+        <li role="presentation" [class.active]="activeTab == 'c1'" (click)="getUsers('c1', '')">
+            <a class="#c1">All</a>
+        </li>
+        <!-- <li role="presentation" [class.active]="activeTab == 'c2'" (click)="getUsers('c2', 'national')">
+            <a class="#c2">National</a>
+        </li>
+        <li role="presentation" [class.active]="activeTab == 'c3'" (click)="getUsers('c3', 'state')">
+            <a class="#c3">State</a>
+        </li> -->
+    </ul>
+</div>
+
+<div id="content">
+    <div class="form-group mb-4">
+        <input type="text" placeholder="Search" class="form-control">
+    </div>
+    <div *ngIf="activeTab == 'c1'">
+        <div class="accordion accordion-flush mt-4" id="accordionFlushExample" *ngIf="thirdParties">
+            <div class="accordion-item mb-3" *ngFor="let component of thirdParties; let inx = index">
+              <h2 class="accordion-header px-3" [id]="'flush-headingOne'+inx">
+                <button class="accordion-button collapsed ps-0" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#flush-collapseOne'+inx" aria-expanded="false" [attr.aria-controls]="'flush-collapseOne'+inx">
+                  {{component?.name}}
+                </button>
+              </h2>
+              <div [id]="'flush-collapseOne'+inx" class="accordion-collapse collapse p-4" [attr.aria-labelledby]="'flush-headingOne'+inx" data-bs-parent="#accordionFlushExample">
+                    <div class="d-flex justify-content-between px-3 mb-3">
+                        <h6 class="text-gre mb-0">Project reported on by {{component?.name}}</h6>
+                    </div>
+                    <div class="container-fluid" *ngIf="component?.projects > 1">
+                        <div class="d-flex p-3 project-list-card cursor" *ngFor="let project of component?.projects; let i = index" [routerLink]="['/third-party/project', project?.id]">
+                            <div class="col">{{i + 1}}.</div>
+                            <div class="col-11">{{project?.title}}</div>
+                            <div class="col text-end"><img src="assets/icons/front-arrow.svg" alt=""></div>
+                        </div>
+                    </div>
+                    <pagination-controls *ngIf="false" (pageChange)="getUserByPage((page = $event))"></pagination-controls>
+                    <div class="text-center py-4" *ngIf="component?.projects?.length < 1">
+                        <h5>No Data</h5>
+                    </div>
+              </div>
+            </div>
+          </div>
+        <pagination-controls (pageChange)="getUserByPage((page = $event))">
+        </pagination-controls>
+    </div>
+<!--
+    <div *ngIf="activeTab == 'c2'">
+        <h5>Tab 2</h5>
+    </div>
+
+    <div *ngIf="activeTab == 'c3'">
+        <h5>Tab 3</h5>
+    </div> -->
+
+</div>

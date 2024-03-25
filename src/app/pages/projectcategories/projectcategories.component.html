@@ -1,0 +1,136 @@
+<div class="mb-4">
+    <span class="page_title px-0">Project Categories</span>
+  </div>
+  
+  <div class="container-fluid">
+    <div class="d-flex justify-content-end">
+      <div class="d-flex flex-row">
+        <a style="display: flex; flex-direction: row">
+            <p data-bs-toggle="modal" data-bs-target="#categoryModal" style="font-family: 'Montserrat', sans-serif; font-style: normal; font-weight: 500; font-size: 1rem; text-transform: initial;">
+              <img src="assets/img/icons/blue-add.svg" alt="" class="me-3" />
+            </p>
+          </a>
+    </div>
+  </div>
+  <div id="content">
+    <div id="content1">
+      <div class="table-responsive p-3">
+        <table class="table table-borderless" id="settingstable" *ngIf="categories">
+          <thead>
+            <tr>
+              <th class="text-gre">S/N</th>
+              <th width="40%" class="text-gre">Title</th>
+              <th class="text-gre">Subcomponent</th>
+              <th class="text-gre">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of categories; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td width="40%">{{ item?.title }}</td>
+              <td width="40%">{{ item?.subcomponent }}</td>
+  
+              <td class="text-center">
+                <div class="btn-group ddl-actions">
+                  <button type="button" class="btn-actions dropdown-toggle dropdown-toggle-split" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    <img src="assets/img/icons/more.svg" alt="" />
+                  </button>
+  
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" (click)="openEditPlanModal(item)">Edit</a>
+                    <a class="dropdown-item" data-toggle="modal" data-target="#delProjectModal"
+                      (click)="projectId = item.id">
+                      Delete</a>
+                  </div>
+                </div>
+  
+              </td>
+            </tr>
+          </tbody>
+        </table>
+       
+      </div>
+      <div class="text-center py-4" *ngIf="!categories">
+        <h5>No Data</h5>
+      </div>
+    
+    </div>
+  
+  </div>
+  <div class="modal fade" id="delProjectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Delete Project Category</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Are you sure,You want to delete this item.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal" id="closeDelProjectModal">
+            Close
+          </button>
+          <button type="button" class="btn btn-success" (click)="deleteProjectById()">
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="delProjectModall" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Delete I</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Are you sure,You want to delete this item.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal" id="closeDelProjectModal">
+            Close
+          </button>
+          <button type="button" class="btn btn-success" (click)="deleteProjectByIdd()">
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="categoryModal" data-bs-backdrop="false" tabindex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="categoryModalLabel">Add Project Category</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form #form="ngForm">
+            <div class="form-group">
+              <label for="sub_component_id">Sub Component</label>
+              <select type="text" name="sub_component_id" ngModel class="form-select">
+                <option *ngFor="let item of subs" [value]="item.id">{{item.title}}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="title">Title</label>
+              <input type="text" name="title" ngModel class="form-control">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" (click)="onSubmit(form)"class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>

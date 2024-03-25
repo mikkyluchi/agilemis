@@ -1,0 +1,100 @@
+<div class="analytics-container mb-5">
+  <div class="container-header px-4 pt-4 pb-3">
+    <div class="row">
+      <div class="col-md-5">
+
+        <h3 class="mb-0 label">{{projects.length}} Projects / Policies / Programmes</h3>
+        <p class="text-left">
+
+          <small class="mr-2"><img width="10" src="assets/icons/flag.svg">-Behind Schedule</small> &nbsp; &nbsp;
+          <small class="mr-2"><img width="10" src="assets/icons/red-warning.svg">-At risk of results delivery
+          </small>
+        </p>
+      </div>
+      <div class="col-md-7 ">
+
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="table-responsive p-4" style="position: relative;">
+    <p *ngIf="projects.length == 0" class="gray text-center ">No projects available</p>
+
+    <table *ngIf="projects.length > 0" class="table table-bordered mt-3" id="projectTabel" style="width:100%">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th colspan="2">Title</th>
+          <th>Budget</th>
+          <th *ngIf="role == 'Admin'">MDA</th>
+          <th>State</th>
+          <!-- <th>Start Date</th> -->
+          <th>Status</th>
+          <th>Action</th>
+          <!-- <th><em>More</em></th> -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of projects | paginate: { itemsPerPage: pageSize, currentPage: p};let i=index">
+          <td>{{1 + i}}</td>
+          <td colspan="2">
+            <!-- <span class="type">
+                <small>
+                  {{{"1":'Project', "2": 'Policy'} [item.type]}}
+                </small>
+              </span>
+              <br> -->
+            <span *ngIf="item.flag"><img class="mr-2" src="assets/icons/flag.svg"></span>
+            <span *ngIf="item.warning"><img class="mr-2 " src="assets/icons/red-warning.svg"></span>
+            <span style="font-size: 11px; color: #06AA49;" *ngIf="item.output"><img width="10px" class="mr-2 "
+                src="assets/icons/success.svg">Deliverable assigned</span>
+            <br>
+
+            {{item.title}}
+
+          </td>
+          <td>{{item.currency}}{{item.budget || 0 | number }}</td>
+          <td *ngIf="role == 'Admin'">{{item.mda.shortcode}}</td>
+
+          <td>{{item.state || 'N/A'}}</td>
+
+          <!-- <td>{{item.start_date | amFromUtc | amDateFormat: 'YYYY-MM-DD'}}</td> -->
+          <td class=""><span style="margin-top: 0.125rem; margin-right: 0.125rem; vertical-align: middle"
+              [ngClass]="{'on': item.status == 'Ongoing', 'ab': item.status == 'Abandoned', 'cp': item.status == 'Completed'}"
+              class="status"></span> <small class="d-inline-block" style=" vertical-align: middle">
+              {{item.status || 'N/A'}}</small>
+          </td>
+          <td>
+            <div class="btn-group" dropdown>
+              <!-- <button type="button" class="btn btn-danger">Action</button> -->
+              <button id="button-split" type="button" dropdownToggle
+                class="btn btn-success dropdown-toggle dropdown-toggle-split" aria-controls="dropdown-split">
+                <span class="caret"></span>
+                <span class="sr-only">Split button!</span>
+              </button>
+              <ul id="dropdown-split" style="" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+                aria-labelledby="button-split">
+                <li role="menuitem"><a class="dropdown-item" (click)="openProjectReports(item)"
+                    href="javascript:void(0)">View</a></li>
+                <!-- <li role="menuitem"><a class="dropdown-item" (click)="assignMandates(item)"
+                    href="javascript:void(0)">Assign Deliverable</a></li>
+                <li role="menuitem"><a class="dropdown-item" (click)="editActivity(item)"
+                    href="javascript:void(0)">Edit</a></li>
+                <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)">Upload Photo Story</a></li>
+                <li class="divider dropdown-divider"></li>
+                <li role="menuitem"><a (click)="deleteProject(item.id)" class="dropdown-item"
+                    href="javascript:void(0)">Delete</a> -->
+                <!-- </li> -->
+              </ul>
+            </div>
+
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  </div>
+</div>

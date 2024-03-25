@@ -1,0 +1,149 @@
+
+<div class="container model-styl">
+  <div class="modal-header model-headStyl">
+    <h4 class="modal-title">{{contractModalTitle}}</h4>
+    <button type="button" class="btn-Close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body d-flex flex-column ">
+    <form [formGroup]="contractForm" class="flex-column" (ngSubmit)="createProject(contractForm)">
+      <div class="row">
+        <div class="col-lg-12 form-group">
+          <label>Title <span class="text-danger">*</span></label>
+          <input type="text" placeholder="Activity Title" formControlName="title" class="form-control">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12 form-group">
+          <label>Description <span class="text-danger">*</span></label>
+          <input type="text" placeholder="Give short description" formControlName="description" class="form-control">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6 form-group">
+          <label for="plan_id">Select Activity Plan <span class="text-danger">*</span></label>
+          <select name="plan_id" id="plan_id" formControlName="plan_id" class="form-select" (change)="setLatLng()">
+            <option *ngFor="let item of plans" [value]="item.id">{{item?.school}}</option>
+          </select>
+
+        </div>
+        <div class="col-lg-6 form-group">
+          <label for="project_component_id">Select Activity Component <span class="text-danger">*</span></label>
+          <select name="project_component_id" id="project_component_id" formControlName="project_component_id" class="form-select">
+            <option *ngFor="let item of components" [value]="item.id">{{item.title}}</option>
+          </select>
+        </div>
+        <div class="col-lg-6 form-group">
+          <label for="sub_component_id">Select Activity Sub Component <span class="text-danger">*</span></label>
+          <select readonly name="sub_component_id" id="sub_component_id" (change)="filterCategories()" formControlName="sub_component_id" class="form-select">
+            <option *ngFor="let item of subs" [value]="item.id">{{item.title}}</option>
+          </select>
+        </div>
+        <div class="col-lg-6 form-group" style="position: relative;">
+          <label for="output">Select Output <span class="text-danger">*</span></label>
+          <div class="card">
+            <p-multiSelect [options]="outputs" formControlName="outputs" optionLabel="title" optionValue="id" [virtualScroll]="true" [virtualScrollItemSize]="30"></p-multiSelect>
+          </div>
+          <!-- <select name="output" id="output" formControlName="output_id" class="form-select">
+            <option *ngFor="let item of outputs" [value]="item.id">{{item.title}}</option>
+          </select> -->
+        </div>
+        <div class="col-lg-6 form-group">
+          <label for="category_id">Select Category</label>
+          <select name="category_id" id="category_id" formControlName="category_id" class="form-select">
+            <option *ngFor="let item of categories" [value]="item.id">{{item.title}}</option>
+          </select>
+        </div>
+        <div class="col-lg-6 form-group">
+          <label>Creative Content Used</label>
+          <input type="text" formControlName="no_of_creative_content_used" class="form-control">
+        </div>
+        <div class="col-lg-6 form-group">
+          <label>Source of Funding <span class="text-danger">*</span></label>
+          <input type="text" formControlName="funding_source" class="form-control">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6 form-group">
+          <label for="">Select Currency <span class="text-danger">*</span></label>
+          <select name="currency" formControlName="currency_type" class="form-select">
+            <option value="naira">Naira</option>
+            <option value="dollar">Dollar</option>
+            <option value="pound">Pound</option>
+          </select>
+        </div>
+        <div class="col-lg-6 form-group">
+          <label>Cost</label>
+          <input type="number" name="cost" formControlName="cost" class="form-control">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6 form-group">
+          <label for="">Select Current Project Status <span class="text-danger">*</span></label>
+          <select name="Status"  formControlName="status" class="form-select">
+            <option value="Not Started">Not Started</option>
+            <option value="On Track">On Track</option>
+            <option value="Below Track">Below Track</option>
+            <option value="Completed">Completed</option>
+            <option value="Abandoned">Abandoned</option>
+          </select>
+        </div>
+        <div class="col-lg-6 form-group">
+          <label>Level of Completion(%) <span class="text-danger">*</span></label>
+          <input type="number" formControlName="loc" id="loc" class="form-control">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6 form-group">
+          <label for="">Select State <span class="text-danger">*</span></label>
+          <select name="state" formControlName="state" class="form-select" (change)="setLocals()">
+            <option [value]="item.id" *ngFor="let item of states">{{item.title}}</option>
+          </select>
+          <!-- <p-multiSelect [options]="states" formControlName="state" defaultLabel="Select a State" optionLabel="name" optionValue="id" (onChange)="setLocals()"></p-multiSelect> -->
+        </div>
+        <div class="col-lg-6 form-group">
+          <label for="lga">Select LGA <span class="text-danger">*</span></label>
+          <select name="lga"  formControlName="lga_id" class="form-select">
+            <option [value]="item.id" *ngFor="let item of tempLocals">{{item.title}}</option>
+          </select>
+          <!-- <p-multiSelect [options]="tempLocals" formControlName="lga" defaultLabel="Select a LGA" optionLabel="name" optionValue="id"></p-multiSelect> -->
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12 form-group">
+          <label>Actual Activity Location <span class="text-danger">*</span></label>
+          <input type="text" placeholder="location" formControlName="location" class="form-control">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6 form-group">
+          <label>Longitude <span class="text-danger">*</span></label>
+          <input type="number" formControlName="longitude" class="form-control">
+        </div>
+        <div class="col-lg-6 form-group">
+          <label>Latitude <span class="text-danger">*</span></label>
+          <input type="number" formControlName="latitude" class="form-control">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6 form-group">
+          <label>Start Date <span class="text-danger">*</span></label>
+          <input type="date" placeholder="End Date" formControlName="start_date" class="form-control">
+        </div>
+        <div class="col-lg-6 form-group">
+          <label>End Date <span class="text-danger">*</span></label>
+          <input type="date" placeholder="End Date" formControlName="end_date" class="form-control">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary px-4 me-3" (click)="activeModal.close('Close click')">Close</button>
+        <button class="btn btn-success px-4" [disabled]="submitted" type="submit">{{contractModalTitle}}</button>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+

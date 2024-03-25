@@ -1,0 +1,64 @@
+<div class="container">
+    <div class="d-flex justify-content-between p-4">
+        <h4 class="modal-title">{{contractModalTitle}}</h4>
+        <!-- <button type="button" class="btn-Close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button> -->
+        <button (click)="activeModal.dismiss('Cross click')" type="button" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+    </div>
+    <div class="modal-body d-flex flex-column ">
+        <form [formGroup]="form" class="flex-column" (ngSubmit)="submit()">
+            <div class="row">
+                <div class="col-lg-6 form-group">
+                    <label for="">Select Year</label>
+                    <select name="year" formControlName="year" class="form-select">
+                        <option value="" selected>- Select Year -</option>
+                <option [value]="item.id" *ngFor="let item of years">{{item.title}}</option>
+                    </select>
+                </div>
+                <div class="col-lg-6 form-group">
+                    <label for="">Select Quarter</label>
+                    <select name="quarter" formControlName="quarter" class="form-select">
+                        <option value="" selected>- Select Quarter -</option>
+                <option [value]="item.id" *ngFor="let item of quarters">{{item.title}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 form-group">
+                    <label for="sub_component_id">Sub Component</label>
+                    <select type="text"  (change)="getOIsbySubs()" name="sub_component_id" formControlName="sub_component_id" class="form-select">
+                        <option value="" selected>- Select sub component -</option>
+                        <option *ngFor="let item of subs" [value]="item.id">{{item.title}}</option>
+                    </select>
+                     
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 form-group">
+                    <label for="">Select output indicator</label>
+                    <select name="outcome_indicator_id" formControlName="outcome_indicator_id" class="form-select">
+                        <option value="" selected>Select output indicator</option>
+                        <option *ngFor="let item of intermediateoutcomeindicators" [value]="item.id">{{item.title}}</option>
+                    </select>
+                </div>
+            </div>
+            
+            
+            <div class="col-lg-12 form-group">
+                <label>Actual Result</label>
+                <input type="text" name="actual_result" formControlName="actual_result" class="form-control">
+            </div>
+            
+            
+           
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary px-4 me-3"
+                    (click)="activeModal.close('Close click')">Close</button>
+                <button class="btn btn-success px-4" type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+
+</div>

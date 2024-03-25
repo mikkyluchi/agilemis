@@ -1,0 +1,48 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'assets/css/demo.css';
+@import '~bootstrap/dist/css/bootstrap.min.css';
+/* @import '~ng-wizard/themes/ng_wizard.min.css'; */
+
+/* Themes */
+/* @import '~ng-wizard/themes/ng_wizard_theme_arrows.min.css';
+@import '~ng-wizard/themes/ng_wizard_theme_circles.min.css';
+@import '~ng-wizard/themes/ng_wizard_theme_dots.min.css'; */
+
+
+
+.multiselect-item-checkbox
+input[type='checkbox']:disabled:checked
++ div:before {
+  background-color: #0da40d;
+}
+
+
+/*.nav-tabs .nav-link {*/
+/*  border: 1px solid  lightblue !important;*/
+/*  border-top-left-radius: 0.25rem !important;*/
+/*  border-top-right-radius: 0.25rem !important;*/
+/*}*/
+
+/*.nav-tabs .nav-link {*/
+/*  color: #d71010 !important;*/
+/*  font-size: 14px;*/
+/*  font-weight: 600;*/
+/*}*/
+/*.nav-item active{*/
+/*  background: lightblue !important;*/
+/*  border-radius: 69% ;*/
+/*  width: 11%;*/
+/*  height: 73px;*/
+/*}*/
+/* .ng-wizard-main ng-wizard-theme-circles.nav-tabs .nav-link {
+  background-color: royalblue !important;
+  border-radius: 50px !important;
+
+} */
+
+
+:root {
+  --primary: #066d67;
+  --secondary: #d9e7c8;
+  --background: #066d67 url("assets/bg.png") no-repeat center center / cover;
+}

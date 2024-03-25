@@ -1,0 +1,5 @@
+#!/bin/bash
+git pull origin master
+npm install --force
+ng build
+git add --all && git commit -am "Progress:$1" && git push origin master

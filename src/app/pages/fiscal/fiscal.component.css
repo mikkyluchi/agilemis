@@ -1,0 +1,41 @@
+
+.selectOption{
+  border-radius: 5px;
+  color:green;
+  border: 1px solid green;
+}
+.yearSelect{
+  position: relative;
+  bottom: 1px;
+  width: 100%;
+}
+
+/*.budgetTable{*/
+/*  display: block;*/
+/*  height: 230px;*/
+/*  overflow-y: auto;*/
+/*}*/
+.bdgt_search{
+  width: 50%;
+  margin-bottom: 4px;
+}
+.fileName{
+  position: relative;
+  right: 349px;
+  top: 13px;
+}
+
+.previousBtn button, .previousBtn .btn:hover{
+  border: 1px solid red;
+  box-sizing: border-box;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  background: red !important;
+  padding: 17px 48px;
+  margin-right: 1rem;
+  position: absolute;
+  bottom: 45px;
+  left: 100px;
+
+}

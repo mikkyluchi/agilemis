@@ -1,0 +1,448 @@
+<div class="container-fluid">
+  <div class="d-flex justify-content-end">
+    <div class="d-flex flex-row">
+      <!-- <button class="btn btn-outline-primary px-3 mx-2" (click)="openPlanModal()">Add Plan</button>
+      <button class="btn btn-outline-primary px-3 mx-2" (click)="openProjectModal()">Add Projects</button> -->
+      <button class="btn btn-outline-primary px-3 mx-2" data-toggle="modal" data-target="#beneficiariesUploadModal">Upload Beneficiaries</button>
+      <button class="btn btn-outline-primary px-3 mx-2 d-none" data-toggle="modal" data-target="#beneficiariesUploadModal" id="closeBeneficiariesUploadModal">Upload Beneficiaries</button>
+      <a href="assets/file/template.xlsx" class="btn btn-outline-primary px-3 mx-2">Download Template</a>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="table-responsive p-3">
+    <table class="table table-bordered" id="settingstable" *ngIf="beneficiaries">
+      <thead>
+        <tr>
+          <th class="text-gre">S/N</th>
+          <th>school_name</th>
+          <th>EMIS_code</th>
+          <th>Principal name</th>
+          <th>Principal phone</th>
+          <th>Full Name</th>
+          <th>Gender</th>
+          <th>DOB</th>
+          <th>Class</th>
+          <th>Critical Life Skills Training Recieved</th>
+          <th>critical_life_skills_learnt</th>
+          <th>digital_literacy_skills_training_recieved</th>
+          <th>digital_literacy_skills_learnt</th>
+          <th>scholarship_recieved</th>
+          <th>scholarship_tranches_recieved</th>
+          <th>bank</th>
+          <th>caregiven_fullname</th>
+          <th>caregiven_phone</th>
+          <th>caregiven_bnv_nin_voter_id</th>
+          <th>caregiven_address</th>
+          <th>head_teacher_name</th>
+          <th>head_teacher_phone</th>
+          <th>enumerator</th>
+          <th>enumerator_phone</th>
+          <th>sector</th>
+          <th>community_name</th>
+          <th>ward_name</th>
+          <th>location</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of beneficiaries; let i = index">
+          <td>{{i + 1}}</td>
+          <td>{{item?.school_name}}</td>
+          <td>{{item?.EMIS_code}}</td>
+          <td>{{item?.principal_name}}</td>
+          <td>{{item?.principal_phone}}</td>
+          <td>{{item?.fullname}}</td>
+          <td>{{item?.gender}}</td>
+          <td>{{item?.dob}}</td>
+          <td>{{item?.class}}</td>
+          <td>{{item?.critical_life_skills_training_recieved}}</td>
+          <td>{{item?.critical_life_skills_learnt}}</td>
+          <td>{{item?.digital_literacy_skills_training_recieved}}</td>
+          <td>{{item?.digital_literacy_skills_learnt}}</td>
+          <td>{{item?.scholarship_recieved}}</td>
+          <td>{{item?.scholarship_tranches_recieved}}</td>
+          <td>{{item?.bank}}</td>
+          <td>{{item?.caregiven_fullname}}</td>
+          <td>{{item?.caregiven_phone}}</td>
+          <td>{{item?.caregiven_bnv_nin_voter_id}}</td>
+          <td>{{item?.caregiven_address}}</td>
+          <td>{{item?.head_teacher_name}}</td>
+          <td>{{item?.head_teacher_phone}}</td>
+          <td>{{item?.enumerator}}</td>
+          <td>{{item?.enumerator_phone}}</td>
+          <td>{{item?.sector}}</td>
+          <td>{{item?.community_name}}</td>
+          <td>{{item?.ward_name}}</td>
+          <td>{{item?.location}}</td>
+          <td>
+            <div class="btn-group ddl-actions">
+              <button type="button" class="btn-actions dropdown-toggle dropdown-toggle-split"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img src="assets/img/icons/more.svg" alt="" />
+              </button>
+
+              <div class="dropdown-menu">
+                <a class="dropdown-item" (click)="openModal(item)">Edit</a>
+                <a class="dropdown-item" data-toggle="modal" data-target="#delProjectModal"
+                  (click)="projectId = item.id">
+                  Delete</a>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- <pagination-controls (pageChange)="getUserByPage((page = $event))"></pagination-controls> -->
+  </div>
+</div>
+<div class="container-fluid" *ngIf="!has_added_students">
+  <div class="d-flex justify-content-end">
+    <div class="d-flex flex-row">
+      <!-- <button class="btn btn-outline-primary px-3 mx-2" (click)="openPlanModal()">Add Plan</button>
+      <button class="btn btn-outline-primary px-3 mx-2" (click)="openProjectModal()">Add Projects</button> -->
+      <button class="btn btn-outline-primary px-3 mx-2" data-toggle="modal" data-target="#tsModal">Add Total Number of Students</button>
+      <!-- <button class="btn btn-outline-primary px-3 mx-2 d-none" data-toggle="modal" data-target="#beneficiariesUploadModal" id="closeBeneficiariesUploadModal">Upload Beneficiaries</button>
+      <a href="assets/file/template.xlsx" class="btn btn-outline-primary px-3 mx-2">Download Template</a> -->
+    </div>
+  </div>
+</div>
+<div class="container-fluid" *ngIf="has_added_students">
+  <div class="d-flex justify-content-end">
+    <div class="d-flex flex-row">
+      <!-- <button class="btn btn-outline-primary px-3 mx-2" (click)="openPlanModal()">Add Plan</button>
+      <button class="btn btn-outline-primary px-3 mx-2" (click)="openProjectModal()">Add Projects</button> -->
+      <button class="btn btn-outline-primary px-3 mx-2" data-toggle="modal" data-target="#tsModal">Edit Total Number of Students</button>
+      <!-- <button class="btn btn-outline-primary px-3 mx-2 d-none" data-toggle="modal" data-target="#beneficiariesUploadModal" id="closeBeneficiariesUploadModal">Upload Beneficiaries</button>
+      <a href="assets/file/template.xlsx" class="btn btn-outline-primary px-3 mx-2">Download Template</a> -->
+    </div>
+  </div>
+</div>
+<div class="card" *ngIf="has_added_students">
+  <div class="table-responsive p-3">
+    <table class="table table-bordered" id="settingstable">
+      
+      <tbody>
+        <tr>
+          <td>Total Number of Students Enrolled in all AGILE Benefiting Schools</td>
+          <td>{{record?.number_of_students}}</td>
+          
+          <!-- <td>
+            <div class="btn-group ddl-actions">
+              <button type="button" class="btn-actions dropdown-toggle dropdown-toggle-split"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img src="assets/img/icons/more.svg" alt="" />
+              </button>
+
+              <div class="dropdown-menu">
+                
+                <a class="dropdown-item" data-toggle="modal" data-target="#tsModal">
+                  Edit</a>
+              </div>
+            </div>
+          </td> -->
+        </tr>
+        <tr>
+          <td>Total Number of Girls finishing Primary Six (6)</td>
+          <td>{{record?.total_number_of_girls_finishing_primary_six}}</td>
+          
+          <!-- <td>
+            <div class="btn-group ddl-actions">
+              <button type="button" class="btn-actions dropdown-toggle dropdown-toggle-split"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img src="assets/img/icons/more.svg" alt="" />
+              </button>
+
+              <div class="dropdown-menu">
+                
+                <a class="dropdown-item" data-toggle="modal" data-target="#tsModal">
+                  Edit</a>
+              </div>
+            </div>
+          </td> -->
+        </tr>
+        
+        <tr>
+          <td>Total Number of Secondary Schools</td>
+          <td>{{record?.total_number_of_secondary_school_students}}</td>
+          
+          <!-- <td>
+            <div class="btn-group ddl-actions">
+              <button type="button" class="btn-actions dropdown-toggle dropdown-toggle-split"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img src="assets/img/icons/more.svg" alt="" />
+              </button>
+
+              <div class="dropdown-menu">
+                
+                <a class="dropdown-item" data-toggle="modal" data-target="#tsModal">
+                  Edit</a>
+              </div>
+            </div>
+          </td> -->
+        </tr>
+        <tr>
+          <td>Number of grievances addressed through  the project GRM System</td>
+          <td>{{record?.number_of_grieviances}}</td>
+          
+          <!-- <td>
+            <div class="btn-group ddl-actions">
+              <button type="button" class="btn-actions dropdown-toggle dropdown-toggle-split"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img src="assets/img/icons/more.svg" alt="" />
+              </button>
+
+              <div class="dropdown-menu">
+                
+                <a class="dropdown-item" data-toggle="modal" data-target="#tsModal">
+                  Edit</a>
+              </div>
+            </div>
+          </td> -->
+        </tr>
+      </tbody>
+      
+    </table>
+    <!-- <pagination-controls (pageChange)="getUserByPage((page = $event))"></pagination-controls> -->
+  </div>
+</div>
+<!--Upload Project Modal-->
+<div class="modal fade bd-example-modal-lg" id="beneficiariesUploadModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="beneficiariesUploadModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Upload</h5>
+        <a class="btn-close" data-dismiss="modal" aria-label="Close"></a>
+      </div>
+      <div class="modal-body">
+            <div>
+              <div class="col-md-6 form-group">
+                <label for="" class="form-label">Select Sub-Component *</label>
+                  <select [(ngModel)]="sub_component_id" class="form-select">
+                    <option *ngFor="let item of subComponents" [value]="item.id">{{item.title}}</option>
+                  </select>
+              </div>
+              <div class="col-md-6 form-group">
+                <label for="" class="form-label">Select State *</label>
+                  <select [(ngModel)]="state_id" class="form-select" (change)="setLGAS()">
+                    <option *ngFor="let item of states" [value]="item.id">{{item.title}}</option>
+                  </select>
+              </div>
+              <div class="col-md-6 form-group">
+                <label for="" class="form-label">Select LGA *</label>
+                  <select [(ngModel)]="lga_id" class="form-select">
+                    <option *ngFor="let item of selectedState?.lgas" [value]="item.id">{{item.title}}</option>
+                  </select>
+              </div>
+              <div class="col-md-6">
+                <label for="" class="form-label">Select Report XLSX Files to Upload *</label>
+                <input type="file" (change)="onfilechange($event)" multiple="false" name="file-name" id="file-name" class="form-control" readonly="readonly" accept=".csv, .xlsx, .xls"/>
+                <span style="position: relative; right: 355px; top: 14px">{{fileName}}</span>
+              </div>
+            </div>
+
+            <div class="container" *ngIf="beneficiariesData?.length > 0">
+              <div class="row">
+                <div class="col-md-12">
+                  <div>
+                    <span><b>File Name</b></span>{{ fileName }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="table-wrapper-scroll-y my-custom-scrollbar table-responsive">
+                  <table class="table table-hover table-fixed">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>school_name</th>
+                        <th>EMIS_code</th>
+                        <th>principal_name</th>
+                        <th>principal_phone</th>
+                        <th>fullname</th>
+                        <th>gender</th>
+                        <th>dob</th>
+                        <th>class</th>
+                        <th>critical_life_skills_training_recieved</th>
+                        <th>critical_life_skills_learnt</th>
+                        <th>digital_literacy_skills_training_recieved</th>
+                        <th>digital_literacy_skills_learnt</th>
+                        <th>scholarship_recieved</th>
+                        <th>scholarship_tranches_recieved</th>
+                        <th>bank</th>
+                        <th>caregiven_fullname</th>
+                        <th>caregiven_phone</th>
+                        <th>caregiven_bnv_nin_voter_id</th>
+                        <th>caregiven_address</th>
+                        <th>head_teacher_name</th>
+                        <th>head_teacher_phone</th>
+                        <th>enumerator</th>
+                        <th>enumerator_phone</th>
+                        <th>sector</th>
+                        <th>community_name</th>
+                        <th>ward_name</th>
+                        <th>location</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      <tr *ngFor="let item of beneficiariesData; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.school_name" class="form-control" style="width: 150px;"/>
+                        </td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.EMIS_code" class="form-control" style="width: 150px;"/>
+                        </td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.principal_name" class="form-control" style="width: 150px;"/>
+                        </td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.principal_phone" class="form-control" style="width: 150px;"/>
+                        </td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.fullname" class="form-control" style="width: 150px;"/>
+                        </td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.gender" class="form-control" style="width: 150px;"/>
+                        </td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.dob" class="form-control" style="width: 150px;"/>
+                        </td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.class" class="form-control" style="width: 150px;"/>
+                        </td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.critical_life_skills_training_recieved" class="form-control" style="width: 150px;"/>
+                        </td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.critical_life_skills_learnt" class="form-control" style="width: 150px;"/>
+                        </td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.digital_literacy_skills_training_recieved" class="form-control" style="width: 150px;"/>
+                        </td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.digital_literacy_skills_learnt" class="form-control" style="width: 150px;"/>
+                        </td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.scholarship_recieved" class="form-control" style="width: 150px;"/>
+                        </td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.scholarship_tranches_recieved" class="form-control" style="width: 150px;"/>
+                        </td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.bank" class="form-control" style="width: 150px;"/>
+                        </td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.caregiven_fullname" class="form-control" style="width: 150px;"/>
+                        </td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.caregiven_phone" class="form-control" style="width: 150px;"/>
+                        </td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.caregiven_bnv_nin_voter_id" class="form-control" style="width: 150px;"/>
+                        </td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.caregiven_address" class="form-control" style="width: 150px;"/>
+                        </td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.head_teacher_name" class="form-control" style="width: 150px;"/>
+                        </td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.head_teacher_phone" class="form-control" style="width: 150px;"/>
+                        </td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.enumerator" class="form-control" style="width: 150px;"/>
+                        </td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.enumerator_phone" class="form-control" style="width: 150px;"/>
+                        </td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.sector" class="form-control" style="width: 150px;"/>
+                        </td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.community_name" class="form-control" style="width: 150px;"/>
+                        </td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.ward_name" class="form-control" style="width: 150px;"/>
+                        </td>
+                        <td>
+                          <input type="text" [(ngModel)]="item.location" class="form-control" style="width: 150px;"/>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="footer d-flex flex-md-row justify-content-center">
+                  <button
+                    class="closs cancel"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    class="submit"
+                    id="nexts2"
+                    (click)="submitBeneficiaries()"
+                  >
+                    Upload Report
+                  </button>
+                </div>
+              </div>
+            </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="tsModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="tsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add / Edit</h5>
+        <a class="btn-close" data-dismiss="modal" aria-label="Close"></a>
+      </div>
+      <div class="modal-body">
+            <div>
+              <div class="col-md-12 form-group">
+                <label for="" class="form-label">Total Number of Students Enrolled in all AGILE Benefiting Schools</label>
+                  <input [(ngModel)]="total_students" name="total_students" class="form-control">
+              </div>
+              <div class="col-md-12 form-group">
+                <label for="" class="form-label">Total Number of Girls finishing Primary Six (6)</label>
+                  <input [(ngModel)]="primary_six" name="primary_six" class="form-control">
+              </div>
+              <div class="col-md-12 form-group">
+                <label for="" class="form-label">Total Number of Secondary Schools</label>
+                  <input [(ngModel)]="secondary_schools" name="secondary_schools" class="form-control">
+              </div>
+              <div class="col-md-12 form-group">
+                <label for="" class="form-label">Number of grievances addressed through  the project GRM System</label>
+                  <input [(ngModel)]="number_of_grieviances" name="number_of_grieviances" class="form-control">
+              </div>
+             
+            </div>
+
+            <div class="footer d-flex flex-md-row justify-content-center">
+              <button
+                class="closs cancel"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                class="submit"
+                id="nexts2"
+                (click)="submitTotalNumberOfStudents()"
+              >
+                Submit
+              </button>
+            </div>
+      </div>
+    </div>
+  </div>
+</div>

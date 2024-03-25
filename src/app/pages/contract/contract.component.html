@@ -1,0 +1,348 @@
+<div class="row align-items-baseline justify-content-between">
+  <div>
+    <span class="page_title mb-4 px-0">Fiscal managment</span>
+    <span class="page_sub text-secondary"><i class="nc-icon nc-minimal-right text-dark font-weight-bold mt-2"></i> Contract managment</span>
+  </div>
+  <div class="d-flex justify-content-end mt-2 mb-3">
+    <div class="d-flex flex-row">
+      <button class="add-button align-items-center d-flex me-2" style="background: #36A9B0;"  (click)="openProjectModal()">
+        <img src="assets/img/icons/blueplus.svg" alt="">
+         Add Project
+      </button>
+      <button class="add-button align-items-center d-flex me-2" style="background: #36A9B0;" data-toggle="modal" data-target="#createContractorModal" (click)="contractorformReset()">
+        <img src="assets/img/icons/blueplus.svg" alt=""  >
+         Add Contractor
+      </button>
+
+    </div>
+  </div>
+</div>
+
+
+
+<div class="secondrow">
+    <div class="d-flex flex-row">
+        <button class="filterbtn me-2"  ><img src="assets/img/icons/filter.svg" alt="" class="me-1"> <span class="me-3">Filter</span></button>
+        <div class="input-group no-border">
+          <div class="d-flex input-group-append">
+            <div class="input-group-text">
+              <i class="nc-icon nc-zoom-split search-icon"></i>
+              <i class="nc-icon nc-minimal-down down-icon"></i>
+            </div>
+            <input type="text" *ngIf="toggleSearch"   class="form-control" placeholder="Search contract :" style="width: 402px;" [(ngModel)]="contractQuery" >
+            <input type="text" *ngIf="!toggleSearch"   class="form-control" placeholder="Search contractor :" style="width: 402px;" [(ngModel)]="contractorQuery" >
+          </div>
+        </div>
+    </div>
+
+    <div id="tabs">
+        <ul class="nav nav-tabs" id="user-nav-tabs">
+            <li role="presentation" class="active" (click)="getContracts();setCurrentTabValue('Contracts')"><a  class="#c1">All Contracts</a></li>
+            <li role="presentation" (click)="getContractors();setCurrentTabValue('Contractors');"><a  class="#c2">Contractors</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="content">
+    <div id="content1" >
+      <div *ngIf="!allcontractdata" class="alert alert-success font-weight-bold text-center">
+        No Contract Found !
+      </div>
+        <table class="table table-borderless" *ngIf="!!allcontractdata" id="contractTable">
+            <thead>
+              <tr>
+                <th><input type="checkbox" value="Bike"></th>
+                <th>#</th>
+                <th class="text-gre">Title</th>
+                <th class="text-gre">FEC ID</th>
+                <th class="text-gre">Contractors</th>
+                <th class="text-gre">Budget</th>
+                <th class="text-gre">MDA</th>
+                <th class="text-gre">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of allcontractdata |filter:contractQuery">
+                <td><input type="checkbox" value="Bike"></td>
+                <td>{{item.id}}</td>
+                <td>{{item.title}}</td>
+                <td>{{item.fec_id}}</td>
+                <td>{{item?.contractor?.name}}</td>
+                <td>₦{{item?.budget?.amount}}</td>
+                <td>{{item?.mda?.shortcode}}</td>
+                <td>
+                  <div class="btn-group ddl-actions">
+                    <button type="button" class="btn-actions dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <img src="assets/img/icons/more.svg" alt="">
+                    </button>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item"   data-toggle="modal" data-target="#createContractModal" (click)="editContracts(item)" >Edit</a>
+                      <a class="dropdown-item" data-toggle="modal" data-target="deleteContractModal">Delete</a>
+
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+    </div>
+    <div id="content2">
+      <div *ngIf="!allcontractordata" class="alert alert-success font-weight-bold text-center">
+        No Contractors Found !
+      </div>
+
+        <table class="table table-borderless" *ngIf="!!allcontractordata" id="contractorsTable">
+            <thead>
+              <tr>
+                <th><input type="checkbox" value="Bike"></th>
+                <th class="text-gre">Name</th>
+                <th class="text-gre">State</th>
+                <th class="text-gre">RCC Number</th>
+                <th class="text-gre">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of allcontractordata |filter:contractorQuery">
+                <td><input type="checkbox" value="Bike"></td>
+                <td>{{item.name}}</td>
+                <td>{{item.state}}</td>
+                <td>{{item.cac_no}}</td>
+                <td>
+                  <div class="btn-group ddl-actions">
+                    <button type="button" class="btn-actions dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <img src="assets/img/icons/more.svg" alt="">
+                    </button>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item"   data-toggle="modal" data-target="#createContractorModal" (click)="editContractors(item)" >Edit</a>
+                      <a class="dropdown-item" data-toggle="modal" data-target="#delContractorModal" (click)="getContractorId(item.id)">Delete</a>
+
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+    </div>
+</div>
+
+<!--Add Contract Modal-->
+<!--<div class="modal fade bd-example-modal-lg" id="createContractModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
+<!--  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">-->
+<!--    <div class="modal-content">-->
+<!--      <div class="modal-header">-->
+<!--        <h5 class="modal-title" id="exampleModalLabel">{{contractModalTitle}}</h5>-->
+<!--        <a class=" btn-close" data-dismiss="modal" aria-label="Close"></a>-->
+<!--      </div>-->
+<!--      <div class="modal-body d-flex flex-column">-->
+<!--        <form [formGroup]="contractForm" class="flex-column" (ngSubmit)="createProject(contractForm)"  >-->
+<!--          <div class="row">-->
+<!--            <div class="col-lg-6 d-flex flex-column">-->
+<!--              <label for="">Enter Title</label>-->
+<!--              <input type="text" placeholder="Activity Title" name="title"    formControlName="title" >-->
+<!--            </div>-->
+<!--            <div class="col-lg-6 d-flex flex-column">-->
+<!--              <label for="" >Select User's ministry</label>-->
+<!--              <ng-multiselect-dropdown-->
+
+<!--                [placeholder]=""-->
+<!--                [settings]="dropdownSettingMdas"-->
+<!--                [data]="mdasList"-->
+<!--                (onSelect)="getOutputByMdaID()"-->
+<!--                [(ngModel)]="selectedMdas"-->
+<!--                formControlName="mda">-->
+<!--              </ng-multiselect-dropdown>-->
+<!--            </div>-->
+<!--          </div>-->
+
+
+<!--          <div class="row">-->
+<!--            <div class="col-lg-6 d-flex flex-column">-->
+<!--              <label for="">Select Output</label>-->
+<!--              <ng-multiselect-dropdown-->
+
+<!--                [placeholder]=""-->
+<!--                [settings]="dropdownSettingOutput"-->
+<!--                [data]="output"-->
+<!--                formControlName="output">-->
+<!--              </ng-multiselect-dropdown>-->
+<!--            </div>-->
+<!--            <div class="col-lg-6 d-flex flex-column">-->
+<!--              <label for="">Currency</label>-->
+<!--              <select name="currency" [(ngModel)]="currencySymbol" formControlName="currency">-->
+<!--                <option> Select</option>-->
+<!--                <option *ngFor="let item of currency">{{item.name}}</option>-->
+<!--              </select>-->
+<!--            </div>-->
+<!--          </div>-->
+
+
+<!--          <div class="row">-->
+<!--            <div class="col-lg-6 d-flex flex-column">-->
+<!--              <label for="">Budget Item</label>-->
+<!--              <ng-multiselect-dropdown-->
+
+<!--                [placeholder]=""-->
+<!--                [settings]="dropdownSettingBudget"-->
+<!--                [data]="allBudgetdata"-->
+<!--                formControlName="budget_item">-->
+<!--              </ng-multiselect-dropdown>-->
+
+<!--            </div>-->
+<!--            <div class="col-lg-6 d-flex flex-column">-->
+<!--              <label for="">FEC memo ID</label>-->
+<!--              <input type="number" name="fecid"  formControlName="fec_id">-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="row">-->
+<!--            <div class="col-lg-6 d-flex flex-column">-->
+<!--              <label for="">Activity Budget</label>-->
+<!--              <input type="text" name="activitybudget "  formControlName="budget">-->
+<!--            </div>-->
+<!--            <div class="col-lg-6 d-flex flex-column">-->
+<!--              <label for=""> FEC approved cost</label>-->
+<!--              <input type="number" name="feccost"  formControlName="cost">-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="row">-->
+<!--            <div class="col-lg-6 d-flex flex-column">-->
+<!--              <label for="">Type</label>-->
+<!--              <select name="type"  formControlName="type">-->
+<!--                <option> Select</option>-->
+<!--                <option>Infrastrcture</option>-->
+<!--                <option>Services</option>-->
+<!--              </select>-->
+<!--            </div>-->
+<!--            <div class="col-lg-6 d-flex flex-column">-->
+<!--              <label for="">Current Status </label>-->
+<!--              <select name="Status"  formControlName="status">-->
+<!--                <option> Select</option>-->
+<!--                <option *ngFor="let item of status">{{item.name}}</option>-->
+<!--              </select>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="row">-->
+<!--            <div class="col-lg-6 d-flex flex-column">-->
+<!--              <label for="">Select Activity State </label>-->
+
+<!--              <select name="state"  formControlName="state">-->
+<!--                <option> Select</option>-->
+<!--                <option *ngFor="let item of state">{{item.name}} </option>-->
+<!--              </select>-->
+<!--            </div>-->
+<!--            <div class="col-lg-6 d-flex flex-column">-->
+<!--              <label for=""> Select Activity LGA</label>-->
+
+<!--              <select name="role_id"  formControlName="lga">-->
+<!--                <option> Select</option>-->
+<!--                <option>Biu</option>-->
+<!--                <option>Borno</option>-->
+<!--                <option>Kaga</option>-->
+<!--                <option>channai</option>-->
+<!--              </select>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="row">-->
+
+<!--            <div class="col-lg-6 d-flex flex-column">-->
+<!--              <label>Duration</label>-->
+<!--&lt;!&ndash;              <input type="text" matInput&ndash;&gt;-->
+<!--&lt;!&ndash;                     ngxDaterangepickerMd&ndash;&gt;-->
+<!--&lt;!&ndash;                     [locale]="{applyLabel: 'ok', format: 'DD-MM-YYYY'}"&ndash;&gt;-->
+<!--&lt;!&ndash;                     [autoApply]="true"&ndash;&gt;-->
+<!--&lt;!&ndash;                     [linkedCalendars]="true"&ndash;&gt;-->
+<!--&lt;!&ndash;                     [closeOnAutoApply]="true"&ndash;&gt;-->
+<!--&lt;!&ndash;                     [showDropdowns]="true"&ndash;&gt;-->
+<!--&lt;!&ndash;                     [customRangeDirection]="options.customRangeDirection"&ndash;&gt;-->
+<!--&lt;!&ndash;                     class="datepicker-calendar-icon"&ndash;&gt;-->
+<!--&lt;!&ndash;                     startKey="start"&ndash;&gt;-->
+<!--&lt;!&ndash;                     endKey="end"&ndash;&gt;-->
+<!--&lt;!&ndash;                      [(ngModel)]="selected"&ndash;&gt;-->
+
+<!--&lt;!&ndash;                     name="daterange"/>&ndash;&gt;-->
+<!--              <input type="date" placeholder="End Date" formControlName="start_date">-->
+<!--            </div>-->
+<!--            <div class="col-lg-6 d-flex flex-column">-->
+<!--              <label>Duration</label>-->
+<!--              <input type="date" placeholder="End Date" formControlName="end_date">-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          <div class="footer">-->
+<!--            <button class="closs cancel" data-dismiss="modal" aria-label="Close">Cancel</button>-->
+<!--            <button class="submit">{{contractModalBtn}}</button>-->
+<!--          </div>-->
+<!--        </form>-->
+<!--      </div>-->
+
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--Add Contractor Modal-->
+
+<div class="modal fade bd-example-modal-lg" id="createContractorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{{contractorModalTitle}}</h5>
+        <a class=" btn-close" data-dismiss="modal" aria-label="Close"></a>
+      </div>
+      <div class="modal-body d-flex flex-column">
+        <form [formGroup]="contractorForm" class="flex-column" (ngSubmit)="createContractor(contractorForm)"  >
+
+
+          <div class="row">
+            <div class="col-lg-6 d-flex flex-column">
+              <label for="">Company Name</label>
+              <input type="text" name="name"  formControlName="name">
+            </div>
+            <div class="col-lg-6 d-flex flex-column">
+              <label for="">Company Address</label>
+              <input type="text" name="Address"  formControlName="address">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6 d-flex flex-column">
+              <label for="">CAC no.</label>
+              <input type="text" name="cacno"  formControlName="cac_no">
+            </div>
+            <div class="col-lg-6 form-group">
+              <label for="">State</label>
+              <select name="state" class="form-control" formControlName="state">
+                <option [value]="null" ngValue="null" hidden>{{placeHolder}}</option>
+                <option *ngFor="let item of states" [value]="item.name">{{item.name}} </option>
+              </select>
+            </div>
+          </div>
+          <div class="footer">
+            <button class="closs cancel" data-dismiss="modal" aria-label="Close"  >Cancel</button>
+            <button class="submit">{{contractorModalBtn}}</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!--Delete Contractor Modal-->
+
+<div class="modal fade" id="delContractorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Delete Contractor</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure,You want to delete this  Contractor.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn  btn-danger" data-dismiss="modal">Close</button>
+        <button type="button" class="btn  btn-success"  (click)="deleteContractor()">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>

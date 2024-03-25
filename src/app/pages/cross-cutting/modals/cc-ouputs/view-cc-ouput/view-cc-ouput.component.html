@@ -1,0 +1,35 @@
+<div class="modal-header">
+  <h5 style="display: block" class="modal-title">List of Uploaded Reports</h5>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <h4><small>Title: </small> {{data?.title}}</h4>
+  <p class="mt-4">Uploaded Reports</p>
+  <div class="table-responsive">
+    <table class="table-bordered">
+      <thead>
+        <tr>
+          <th>S/N</th>
+          <th>STATE</th>
+          <th>SUB-COMPONENT</th>
+          <th>VALUE</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of data?.reports; let i = index">
+          <td>{{i + 1}}</td>
+          <td>{{item?.state?.title}}</td>
+          <td>{{item?.sub_component?.title}}</td>
+          <td>{{item?.value}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button class="btn btn-sm btn-secondary px-3" (click)="activeModal.hide()">Close</button>
+</div>

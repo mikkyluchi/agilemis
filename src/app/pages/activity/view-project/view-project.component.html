@@ -1,0 +1,122 @@
+<div class="wrapper">
+  <div class="container-fluid">
+    <div class="row pb-3">
+        <div class="col-12 card p-3 mb-4">
+          <p class="page_title px-0">Project Title</p>
+          <p class="mb-0">{{ project?.title }}</p>
+      </div>
+      <div class="col-12 card mb-4">
+        <div class="row p-4">
+          <div class="col-md-6 mb-4">
+            <p class="px-0 page_title mb-3">
+              Project Details
+            </p>
+            <div class="mb-3 card p-3">
+              <p class="mb-0 title mb-2">State</p>
+              <p class="mb-0 ">{{ project?.lga?.state?.title }}</p>
+            </div>
+            <div class="mb-3 card p-3">
+              <p class="mb-0 title mb-2">LGA</p>
+              <p class="mb-0 ">
+                {{ project?.lga?.title }}
+              </p>
+            </div>
+            <div class="mb-3 card p-3">
+              <p class="mb-0 title mb-2">Source of Funding</p>
+              <p class="mb-0 ">
+                {{ project?.funding_source }}
+              </p>
+            </div>
+
+          </div>
+          <div class="col-md-6 mb-4">
+              <p class="px-0 page_title font-weight-light mb-3">
+                Project Performance
+              </p>
+
+              <div class="mb-3 card p-3">
+                <p class="mb-0 title mb-2">Project Status</p>
+                <p class="mb-0 ">{{ project?.status }}</p>
+              </div>
+              <div class="mb-3 card p-3">
+                <p class="mb-0 title mb-2">Level of completion</p>
+                <div class="linearguageWrapper px-3 mb-4">
+                  <div class="label" [ngStyle]="{'margin-left': 'calc(' + project?.loc + '% - 11px)'}">
+                    {{ project?.loc }}%
+                  </div>
+                  <div class="traffic">
+                    <div data-toggle="tooltip" data-placement="top" title="0%" class="tick" [ngStyle]="{left: 'calc(' + project?.loc + '% - 11px)'}"></div>
+                    <span class="target"> 100% </span>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3 card p-3">
+                <p class="mb-0 title mb-2">Output Indicator</p>
+                <p class="mb-0 ">{{project?.output?.title}}</p>
+              </div>
+          </div>
+
+          <!-- Image section -->
+          <div class="col-12 my-4">
+            <div class="bkg-success">
+              <div
+                class="container-header d-flex justify-content-between px-4 pt-4 pb-3"
+              >
+                <p class="px-0 page_title">Photo Gallery</p>
+              </div>
+              <div class="p-4" *ngIf="photos?.length > 0">
+                <div class="container-fluid">
+                  <div class="portfolio-item row">
+                    <div class="item lap col-lg-3 col-md-4 col-6 col-sm mb-4" *ngFor="let item of photos">
+                      <a
+                        href="item"
+                        class="fancylight popup-btn"
+                        data-fancybox-group="light"
+                      >
+                        <img
+                          class="img-fluid"
+                          [src]="item"
+                          alt=""
+                        />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Report table -->
+      <div class="col-12 mb-4">
+        <p class="px-0 page_title">Reports Submitted for this Project</p>
+        <div class="table-responsive">
+          <table class="table table-bordered table-hovered">
+            <thead>
+              <tr class="text-center">
+                <th>S/N</th>
+                <th>Submitted By</th>
+                <th>Level of Completion</th>
+                <th>Challenges</th>
+                <th>Recommendations</th>
+                <th>Comments</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let item of project?.reports; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td width="10%" class="text-center">{{ item?.user?.name }}</td>
+                <td class="text-center">{{item.loc}}%</td>
+                <td class="text-center">{{item.challenges}}</td>
+                <td class="text-center">{{item.recommendations}}</td>
+                <td>{{ item.comments }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

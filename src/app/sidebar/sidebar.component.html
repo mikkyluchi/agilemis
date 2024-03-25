@@ -1,0 +1,173 @@
+<div class="sidebar-wrapper">
+  <div class="mainlogo py-3">
+    <a [routerLink]="['/analytics']">
+      <img src="assets/logo/agile.png"/>
+    </a>
+  </div>
+  <ul class="nav">
+    <li *ngFor="let menuItem of menuItems" routerLinkActive="active" id="{{ menuItem.id }}">
+      <!-- <a
+        [routerLink]="[menuItem.path]"
+        style="display: flex; flex-direction: row"
+        (click)="addAct($event.currentTarget)"
+      >
+        <img src="assets/img/icons/{{ menuItem.icon }}" alt="" class="me-3" />
+        <p
+          style="
+            font-family: 'Montserrat', sans-serif;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 1rem;
+            text-transform: initial;
+          "
+        >
+          {{ menuItem.title }}
+        </p>
+        <i class="{{ menuItem.subclass }}" style="font-size: 0.625rem"></i>
+      </a> -->
+      <ng-template #disabledLink>
+        <a
+          style="display: flex; flex-direction: row"
+          id="{{ menuItem.id }}"
+          (click)="addAct($event.currentTarget)"
+        >
+          <img src="assets/img/icons/{{ menuItem.icon }}" alt="" class="me-3" />
+          <p
+            style="
+              font-family: 'Montserrat', sans-serif;
+              font-style: normal;
+              font-weight: 500;
+              font-size: 14px;
+              text-transform: initial;
+            "
+          >
+            {{ menuItem.title }}
+          </p>
+          <i class="{{ menuItem.subclass }}" style="font-size: 10px"></i>
+        </a>
+      </ng-template>
+      <a
+        *ngIf="menuItem.path; else disabledLink"
+        [routerLink]="[menuItem.path]"
+        style="display: flex; flex-direction: row"
+        id="{{ menuItem.id }}"
+        (click)="addAct($event.currentTarget)"
+      >
+        <img src="assets/img/icons/{{ menuItem.icon }}" alt="" class="me-3" />
+        <p
+          style="
+            font-family: 'Montserrat', sans-serif;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 14px;
+            text-transform: initial;
+          "
+        >
+          {{ menuItem.title }}
+        </p>
+        <i class="{{ menuItem.subclass }}" style="font-size: 10px"></i>
+      </a>
+      <div class="collapse" id="collapse">
+        <ul class="nav">
+          <li
+            routerlinkactive="active"
+            *ngFor="let Item of menuItem.array"
+            (click)="addActive($event)"
+          >
+            <a [routerLink]="[Item.path]">
+              <p
+                class="border-bottom"
+                style="
+                  font-family: 'Montserrat', sans-serif;
+                  font-style: normal;
+                  font-weight: 500;
+                  font-size: 1rem;
+                  text-transform: initial;
+                  margin-left: 4rem;
+                ">{{ Item.title }}</p></a>
+          </li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+
+  <ul class="nav mt-5">
+    <!-- <li *ngFor="let category of categories">
+      <a style="display: flex; flex-direction: row">
+        <p style="font-family: 'Montserrat', sans-serif; font-style: normal; font-weight: 500; font-size: 1rem; text-transform: initial;">
+          {{category?.title}}
+        </p>
+      </a>
+    </li> -->
+    <li *ngIf="(user.roles[0].name == 'admin' || user.roles[0].name == 'npcu')">
+      <a style="display: flex; flex-direction: row">
+        <p data-bs-toggle="modal" data-bs-target="#categoryModal" style="font-family: 'Montserrat', sans-serif; font-style: normal; font-weight: 500; font-size: 1rem; text-transform: initial;">
+          <img src="assets/img/icons/blue-add.svg" alt="" class="me-3" />
+        </p>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="categoryModal" data-bs-backdrop="false" tabindex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="categoryModalLabel">Add Project Category</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form #form="ngForm">
+          <div class="form-group">
+            <label for="sub_component_id">Sub Component</label>
+            <select type="text" name="sub_component_id" ngModel class="form-select">
+              <option *ngFor="let item of subs" [value]="item.id">{{item.title}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" name="title" ngModel class="form-control">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" (click)="onSubmit(form)"class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <li routerlinkactive="active">
+  <a data-toggle="collapse" href="#forms" class="" aria-expanded="true">
+    <i class="nc-icon nc-ruler-pencil"></i>
+    <p>Forms<b class="caret"></b></p>
+  </a>
+  <div class="collapse show" id="forms" style="">
+    <ul class="nav">
+      <li routerlinkactive="active">
+        <a href="#/forms/regular">
+          <span class="sidebar-mini-icon">RF</span>
+          <span class="sidebar-normal">Regular Forms</span>
+        </a>
+      </li>
+      <li routerlinkactive="active">
+        <a href="#/forms/extended">
+          <span class="sidebar-mini-icon">EF</span>
+          <span class="sidebar-normal">Extended Forms</span>
+        </a>
+      </li>
+      <li routerlinkactive="active"><a href="#/forms/validation">
+        <span class="sidebar-mini-icon">VF</span>
+        <span class="sidebar-normal">Validation Forms</span></a>
+      </li>
+      <li routerlinkactive="active"><a href="#/forms/wizard">
+        <span class="sidebar-mini-icon">W</span>
+        <span class="sidebar-normal">Wizard</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</li> -->

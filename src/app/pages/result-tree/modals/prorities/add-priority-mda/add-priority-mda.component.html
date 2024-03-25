@@ -1,0 +1,27 @@
+<div class="modal-header">
+  <h5 style="display: block" class="modal-title">Select Ministry</h5>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<form (ngSubmit)="create()" [formGroup]="mdaForm">
+  <div class="modal-body">
+    <div class="reg mt-4 mb-4" action="">
+
+      <p><strong>Priority: {{title}}</strong></p>
+
+      <div class="form-group">
+
+        <!-- <select class="form-select" multiple name="mdas" formControlName="mdas" style="width: 100%;">
+          <option selected disabled value="">Please Select the contributing Ministry</option>
+          <option *ngFor="let item of ministries" value="{{item.id}}">{{item.name}}</option>
+        </select> -->
+        <label for="ministry">Select User's ministry</label> <br>
+      </div>
+
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-success" [disabled]="!mdaForm.valid">Save</button>
+  </div>
+</form>

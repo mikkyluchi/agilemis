@@ -1,0 +1,31 @@
+<div class="container">
+    <div class="d-flex justify-content-between p-4">
+        <h4 class="modal-title">{{contractModalTitle}}</h4>
+        <!-- <button type="button" class="btn-Close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button> -->
+        <button (click)="activeModal.dismiss('Cross click')" type="button" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+    </div>
+    <div class="modal-body d-flex flex-column ">
+        <form [formGroup]="form" class="flex-column" (ngSubmit)="submit()">
+            <div class="col-lg-12 form-group">
+                <label>Title</label>
+                <input type="text" name="title" formControlName="title" class="form-control">
+            </div>
+            <div class="col-lg-12 form-group">
+                <label>Description</label>
+                <textarea name="description" formControlName="description" class="form-control"></textarea>
+            </div>
+            
+
+           
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary px-4 me-3"
+                    (click)="activeModal.close('Close click')">Close</button>
+                <button class="btn btn-success px-4" type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+
+</div>

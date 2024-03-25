@@ -1,0 +1,128 @@
+<div class="mb-4">
+  <span class="page_title px-0">Indicator Management</span>
+</div>
+<div id="helptabs">
+  <ul class="nav nav-tabs" id="user-nav-tabs">
+    <li role="presentation" class="active">
+      <a class="#c1">Intermediate Output Indicators</a>
+    </li>
+    <!-- <li role="presentation">
+      <a class="#c2">Sub Output Indicators</a>
+    </li> -->
+    <!-- <li role="presentation">
+      <a class="#c3">Outcomes</a>
+    </li> -->
+  </ul>
+</div>
+<div class="container-fluid">
+  <div class="d-flex justify-content-end">
+    <div class="d-flex flex-row">
+      <button class="btn btn-outline-primary px-3 mx-2" (click)="openPlanModal()">Add Intermediate Outcome Indicator
+        Group</button>
+      <!-- <button class="btn btn-outline-primary px-3 mx-2" (click)="projectUpload()">Upload Projects</button>
+            <a href="assets/file/Agile_Template.xlsx" class="btn btn-outline-primary px-3 mx-2">Download Template</a> -->
+    </div>
+  </div>
+</div>
+<div id="content">
+  <div id="content1">
+    <div class="accordion accordion-flush mt-4" id="accordionFlushExample" *ngIf="intermediateoutcomeindicatorgroups">
+      <div class="accordion-item mb-3" *ngFor="let component of intermediateoutcomeindicatorgroups">
+        <h2 class="accordion-header px-3" [id]="'flush-headingOne'+component?.id"
+          (click)="sortByOutputs(component?.id)">
+          <button class="accordion-button collapsed ps-0" type="button" data-bs-toggle="collapse"
+            [attr.data-bs-target]="'#flush-collapseOne'+component?.id" aria-expanded="false"
+            [attr.aria-controls]="'flush-collapseOne'+component?.id">
+            {{component?.title}}
+          </button>
+        </h2>
+        <div [id]="'flush-collapseOne'+component?.id" class="accordion-collapse collapse py-4"
+          [attr.aria-labelledby]="'flush-headingOne'+component?.id" data-bs-parent="#accordionFlushExample">
+
+
+          <div class="d-flex justify-content-between px-3">
+            <h6 class="text-gre mb-0">List of Indicators</h6>
+          </div>
+          <div class="container-fluid">
+            <div class="d-flex justify-content-end">
+              <div class="d-flex flex-row">
+                <button class="btn btn-outline-primary px-3 mx-2" (click)="openIOIItemModal()">Add Intermediate Outcome
+                  Indicator</button>
+                <!-- <button class="btn btn-outline-primary px-3 mx-2" (click)="projectUpload()">Upload Projects</button>
+                      <a href="assets/file/Agile_Template.xlsx" class="btn btn-outline-primary px-3 mx-2">Download Template</a> -->
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive p-3">
+            <table class="table table-borderless" id="settingstable" *ngIf="projects && projects?.length > 0">
+              <thead>
+                <tr>
+                  <th class="text-gre">S/N</th>
+                  <th width="40%" class="text-gre">Title</th>
+                  <th class="text-gre">Description</th>
+                  <th class="text-gre">Baseline</th>
+                  <th class="text-gre">Target</th>
+                  <th class="text-gre">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of projects; let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td width="40%">{{ item?.title }}</td>
+                  <td width="40%">{{ item?.description }}</td>
+                  <td>{{ item?.baseline }}</td>
+                  <td>{{ item?.target}}</td>
+
+                  <td class="text-center">
+                    <div class="btn-group ddl-actions">
+                      <button type="button" class="btn-actions dropdown-toggle dropdown-toggle-split"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="assets/img/icons/more.svg" alt="" />
+                      </button>
+
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item" (click)="openModal(item)">Edit</a>
+                        <a class="dropdown-item" data-toggle="modal" data-target="#delProjectModal"
+                          (click)="projectId = item.id">
+                          Delete</a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <pagination-controls *ngIf="false" (pageChange)="getUserByPage((page = $event))"></pagination-controls>
+          </div>
+          <div class="text-center py-4" *ngIf="!projects || projects?.length < 1">
+            <h5>No Data</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="modal fade" id="delProjectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Delete Item</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure,You want to delete this item.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="closeDelProjectModal">
+                    Close
+                </button>
+                <button type="button" class="btn btn-success" (click)="deleteProjectById()">
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

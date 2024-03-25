@@ -1,0 +1,24 @@
+.table-striped>thead>tr>*{
+    background: #ffffff !important;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd)>*{
+    background: #EFF5FF;
+}
+
+.blue-btn{
+  background-color: #436AB5;
+  color: #ffffff !important;
+}
+
+.map{
+  width: 100%;
+  min-height: 200px;
+  max-height: 250px;
+}
+
+.btn-toggle-class{
+  background-color: #0d6efd;
+  background: #0d6efd;
+  color: #ffffff !important;
+}

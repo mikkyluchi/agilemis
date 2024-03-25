@@ -1,0 +1,250 @@
+<div class="d-flex justify-content-between px-3 mb-3">
+    <h6 class="text-gre mb-0">Crosscutting Issues</h6>
+</div>
+<!-- <div class="row">
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card green-card card-stats py-4">
+            <div class="card-body card-align">
+                <div class="d-flex">
+                    <span class="card-number mb-1 ms-1">Reported</span>
+                    <div class="pt-2 ms-3" style="line-height: 1; font-size:x-small;">
+                        <small class="text-success"><i class="fa fa-arrow-up"></i> &nbsp;</small><br>
+                        <small>&nbsp;</small>
+                    </div>
+                </div>
+                <span class="card-text mb-1">0</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card green-card card-stats py-4">
+            <div class="card-body card-align">
+                <div class="d-flex">
+                    <span class="card-number blue-txt mb-1 ms-1">Investigated</span>
+                    <div class="pt-2 ms-3" style="line-height: 1; font-size:x-small;">
+                        <small class="blue-txt"><i class="fa fa-arrow-up"></i> &nbsp;</small><br>
+                        <small>&nbsp;</small>
+                    </div>
+                </div>
+                <span class="card-text mb-1">0</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card green-card card-stats py-4">
+            <div class="card-body card-align">
+                <div class="d-flex">
+                    <span class="card-number mb-1 ms-1">Uninvestigated</span>
+                    <div class="pt-2 ms-3" style="line-height: 1; font-size:x-small;">
+                        <small class="text-success"><i class="fa fa-arrow-up"></i> &nbsp;</small><br>
+                        <small>&nbsp;</small>
+                    </div>
+                </div>
+                <span class="card-text mb-1">0</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card green-card card-stats py-4">
+            <div class="card-body card-align">
+                <div class="d-flex">
+                    <span class="card-number mb-1 ms-1 red-txt">Resolved</span>
+                    <div class="pt-2 ms-3" style="line-height: 1; font-size:x-small;">
+                        <small class="red-txt"><i class="fa fa-arrow-up"></i> &nbsp;</small><br>
+                        <small>&nbsp;</small>
+                    </div>
+                </div>
+                <span class="card-text mb-1">0</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card green-card card-stats py-4">
+            <div class="card-body card-align">
+                <div class="d-flex">
+                    <span class="card-number mb-1 ms-1 red-txt">Unresolved</span>
+                    <div class="pt-2 ms-3" style="line-height: 1; font-size:x-small;">
+                        <small class="red-txt"><i class="fa fa-arrow-up"></i> &nbsp;</small><br>
+                        <small>&nbsp;</small>
+                    </div>
+                </div>
+                <span class="card-text mb-1">0</span>
+            </div>
+        </div>
+    </div>
+</div> -->
+<div class="container-fluid">
+    <div class="d-flex justify-content-end">
+        <div class="d-flex flex-row">
+            <button *ngIf="user.roles[0].name !== 'admin'" class="btn btn-outline-primary px-3 mx-2" (click)="openPlanModal()">Add Cross Cutting Issue</button>
+            <!-- <button class="btn btn-outline-primary px-3 mx-2" (click)="projectUpload()">Upload Projects</button>
+            <a href="assets/file/Agile_Template.xlsx" class="btn btn-outline-primary px-3 mx-2">Download Template</a> -->
+        </div>
+    </div>
+</div>
+<div class="d-flex justify-content-between px-3 mb-3">
+    <h6 class="text-gre mb-0">Filter Crosscutting Issues</h6>
+</div>
+<div class="card container-fluid py-3"  *ngIf="user.roles[0].name === 'admin'">
+    <form [formGroup]="form" class="flex-column">
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <div class="form-group">
+                    <label for="">Year</label>
+                    <select (change)="submitt()" required formControlName="year" class="form-select">
+                        <option value="" selected>- Select Year -</option>
+                <option [value]="item.id" *ngFor="let item of years">{{item.title}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="form-group">
+                    <label for="">Quarter</label>
+                    <select (change)="submitt()" required="" formControlName="quarter" name="quarter"
+                        class="form-select">
+                        <option value="" selected>- Select Quarter -</option>
+                <option [value]="item.id" *ngFor="let item of quarters">{{item.title}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="form-group">
+                  <label for="">State</label>
+                  <select (change)="submitt()" formControlName="state_id" name="state_id" id="state_id" class="form-select">
+                    <option value="" selected>- Select State -</option>
+                    <option [value]="item.id" *ngFor="let item of states">{{item.title}}</option>
+                  </select>
+    
+                </div>
+              </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="form-group">
+                    <label for="">Subcomponent</label>
+                    <select (change)="submitt()" required="" formControlName="sub_component_id" name="sub_component_id"
+                        class="form-select">
+                        <option *ngFor="let item of sub_components" [value]="item.id">{{item.title}}</option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+        <div class="col"><span class="cursor" (click)="filterValue = undefined">Clear</span></div>
+    </form>
+</div>
+<div class="card container-fluid py-3"  *ngIf="user.roles[0].name !== 'admin'">
+    <form [formGroup]="form" class="flex-column">
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <div class="form-group">
+                    <label for="">Year</label>
+                    <select (change)="submitt()" required formControlName="year" class="form-select">
+                        <option value="" selected>- Select Year -</option>
+                <option [value]="item.id" *ngFor="let item of years">{{item.title}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="form-group">
+                    <label for="">Quarter</label>
+                    <select (change)="submitt()" required="" formControlName="quarter" name="quarter"
+                        class="form-select">
+                        <option value="" selected>- Select Quarter -</option>
+                <option [value]="item.id" *ngFor="let item of quarters">{{item.title}}</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="form-group">
+                    <label for="">Subcomponent</label>
+                    <select (change)="submit()" required="" formControlName="sub_component_id" name="sub_component_id"
+                        class="form-select">
+                        <option *ngFor="let item of sub_components" [value]="item.id">{{item.title}}</option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+        <div class="col"><span class="cursor" (click)="filterValue = undefined">Clear</span></div>
+    </form>
+</div>
+<div class="d-flex justify-content-between px-3 mb-3">
+    <h6 class="text-gre mb-0">List of Crosscutting Issues</h6>
+</div>
+
+<div class="card">
+    <div class="table-responsive p-3">
+        <table class="table table-bordered" id="settingstable" *ngIf="crosscuttingissues">
+            <thead>
+                <tr>
+                    <th class="text-gre">S/N</th>
+                    <th class="text-gre"   *ngIf="user.roles[0].name === 'admin'">State</th>
+                    <th class="text-gre">Cross cutting issue</th>
+                    <th class="text-gre">Reported</th>
+                    <th class="text-gre">Investigated</th>
+                    <th class="text-gre">Uninvestigated</th>
+                    <th class="text-gre">Resolved</th>
+                    <th class="text-gre">Unresolved</th>
+
+                    <th class="text-gre"    *ngIf="user.roles[0].name === 'state'">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of crosscuttingissues; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td   *ngIf="user.roles[0].name === 'admin'">{{ item?.state }}</td>
+                    <td width="30%">{{ item?.title }}</td>
+                    <td>{{ item?.reported }}</td>
+                    <td>{{ item?.investigated }}</td>
+                    <td>{{ item?.univestigated }}</td>
+                    <td>{{ item?.resolved }}</td>
+                    <td>{{ item?.unresolved }}</td>
+                    <td    *ngIf="user.roles[0].name === 'state'">
+                        <div class="btn-group ddl-actions">
+                            <button type="button" class="btn-actions dropdown-toggle dropdown-toggle-split"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img src="assets/img/icons/more.svg" alt="" />
+                            </button>
+
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" (click)="openModal(item)">Edit</a>
+                                <!-- <a class="dropdown-item" (click)="viewProjectDetail(item)">View</a> -->
+                                <a class="dropdown-item" data-toggle="modal" data-target="#delProjectModal"
+                                    (click)="projectId = item.id">
+                                    Delete</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p-paginator *ngIf="projectMetaData" [rows]="projectMetaData?.per_page" [totalRecords]="projectMetaData?.total"
+            (onPageChange)="paginate($event)"></p-paginator>
+        <!-- <pagination-controls (pageChange)="getUserByPage((page = $event))"></pagination-controls> -->
+    </div>
+</div>
+<div class="modal fade" id="delProjectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Delete Crosscutting Issue</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure,You want to delete this issue.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="closeDelProjectModal">
+                    Close
+                </button>
+                <button type="button" class="btn btn-success" (click)="deleteProjectById()">
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

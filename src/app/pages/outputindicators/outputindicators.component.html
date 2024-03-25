@@ -1,0 +1,439 @@
+<div class="mb-4">
+  <span class="page_title px-0">Indicator Management</span>
+</div>
+<div id="helptabs">
+
+  <ul class="nav nav-tabs" id="user-nav-tabs">
+    <li role="presentation" class="active">
+      <a class="#c1">Output Indicators</a>
+    </li>
+    <li role="presentation" *ngIf="currentUserObj.roles[0].name == 'state'">
+      <a class="#c2" (click)="showRoleIcon()">Pending Review</a>
+    </li>
+  </ul>
+</div>
+<div class="container-fluid">
+  <div class="d-flex justify-content-end">
+    <div class="d-flex flex-row">
+      <button *ngIf="currentUserObj.roles[0].name == 'admin'" class="btn btn-outline-primary px-3 mx-2"
+        (click)="openPlanModal()">Add Output Indicator</button>
+      <button *ngIf="currentUserObj.roles[0].name !== 'admin'" class="btn btn-outline-primary px-3 mx-2"
+        (click)="openDoPlanModal()">Add Output Indicator Result</button>
+    </div>
+  </div>
+</div>
+<!-- All system users -->
+<div id="content">
+  <div id="content1" *ngIf="currentUserObj.roles[0].name == 'admin'">
+    <div class="table-responsive p-3">
+      <table class="table table-borderless" id="settingstable" *ngIf="intermediateoutcomeindicatorgroups">
+        <thead>
+          <tr>
+            <th class="text-gre">S/N</th>
+            <th width="40%" class="text-gre">Title</th>
+            <th class="text-gre">Description</th>
+            <th class="text-gre">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of intermediateoutcomeindicatorgroups; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td width="40%">{{ item?.title }}</td>
+            <td width="40%">{{ item?.description }}</td>
+
+            <td class="text-center">
+              <div class="btn-group ddl-actions">
+                <button type="button" class="btn-actions dropdown-toggle dropdown-toggle-split" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+                  <img src="assets/img/icons/more.svg" alt="" />
+                </button>
+
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" (click)="editPlanModal(item)">Edit</a>
+                  <a class="dropdown-item" (click)="addIModal(item,'a')">
+                    Add To PDO</a>
+                  <a class="dropdown-item" (click)="addIModal(item,'b')">
+                    Add To Sub-PDO</a>
+                  <a class="dropdown-item" (click)="addIModal(item,'c')">
+                    Add To Intermediate-Outcome</a>
+                  <a class="dropdown-item" (click)="addIModal(item,'d')">
+                    Add To Sub Component</a>
+                  <a class="dropdown-item" data-toggle="modal" data-target="#delProjectModal"
+                    (click)="projectId = item.id">
+                    Delete</a>
+                </div>
+              </div>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <pagination-controls *ngIf="false" (pageChange)="getUserByPage((page = $event))"></pagination-controls>
+    </div>
+    <div class="text-center py-4" *ngIf="!intermediateoutcomeindicatorgroups">
+      <h5>No Data</h5>
+    </div>
+    <!-- <div class="accordion accordion-flush mt-4" id="accordionFlushExample" *ngIf="intermediateoutcomeindicatorgroups">
+        <div class="accordion-item mb-3" *ngFor="let component of intermediateoutcomeindicatorgroups">
+          <h2 class="accordion-header px-3" [id]="'flush-headingOne'+component?.id"
+            (click)="sortByOutputs(component?.id)">
+            <button class="accordion-button collapsed ps-0" type="button" data-bs-toggle="collapse"
+              [attr.data-bs-target]="'#flush-collapseOne'+component?.id" aria-expanded="false"
+              [attr.aria-controls]="'flush-collapseOne'+component?.id">
+              {{component?.title}}
+            </button>
+          </h2>
+          <div [id]="'flush-collapseOne'+component?.id" class="accordion-collapse collapse py-4"
+            [attr.aria-labelledby]="'flush-headingOne'+component?.id" data-bs-parent="#accordionFlushExample">
+  
+  
+            <div class="d-flex justify-content-between px-3">
+              <h6 class="text-gre mb-0">List of Indicators</h6>
+            </div>
+            <div class="container-fluid">
+              <div class="d-flex justify-content-end">
+                <div class="d-flex flex-row">
+                  <button class="btn btn-outline-primary px-3 mx-2" (click)="openIOIItemModal()">Add Intermediate Outcome
+                    Indicator</button>
+                   <button class="btn btn-outline-primary px-3 mx-2" (click)="projectUpload()">Upload Projects</button>
+                        <a href="assets/file/Agile_Template.xlsx" class="btn btn-outline-primary px-3 mx-2">Download Template</a>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div> -->
+  </div>
+  <div id="content1" *ngIf="currentUserObj.roles[0].name == 'lga'||currentUserObj.roles[0].name == 'state'">
+    <div class="table-responsive p-3">
+      <table class="table table-borderless" id="settingstable" *ngIf="intermediateoutcomeindicatorgroupsresult">
+        <thead>
+          <tr>
+            <th class="text-gre">S/N</th>
+            <th class="text-gre">Year</th>
+            <th class="text-gre">Quarter</th>
+            <th width="40%" class="text-gre">Indicator</th>
+            <th class="text-gre">Actual Result</th>
+            <th class="text-gre">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of intermediateoutcomeindicatorgroupsresult; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ item?.year }}</td>
+            <td>{{ item?.quarter }}</td>
+            <td width="40%">{{ item?.title }}</td>
+            <td>{{ item?.actual_result }}</td>
+            <td class="text-center">
+              <div class="btn-group ddl-actions"  style="margin-right:10px"
+                *ngIf="currentUserObj.roles[0].name == 'lga'||currentUserObj.roles[0].name == 'state'">
+                <button type="button" class="btn-actions dropdown-toggle dropdown-toggle-split" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+                  <img src="assets/img/icons/more.svg" alt="" />
+                </button>
+
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" (click)="editIPlanModal(item)">Edit</a>
+
+                  <a class="dropdown-item" data-toggle="modal" data-target="#delProjectModall"
+                    (click)="projectId = item.id">
+                    Delete</a>
+
+                  <a class="dropdown-item" (click)="editCommentsModal(item)">
+                    Comments</a>
+                </div>
+              </div>
+              <button class="btn btn-danger btn-xs btn-small  px-4" [disabled]="currentUserObj.roles[0].name == 'lga'" (click)="approveOIData(item); item.approved='1'" *ngIf="item.approval_status =='0'" type="submit">Unapproved</button>
+              <button class="btn btn-success btn-xs btn-small px-4" [disabled]="currentUserObj.roles[0].name == 'lga'" (click)="unapproveOIData(item);  item.approved='0'"   *ngIf="item.approval_status =='1'" type="submit">Approved</button>
+            
+              </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- <pagination-controls *ngIf="false" (pageChange)="getUserByPage((page = $event))"></pagination-controls> -->
+    </div>
+    <div class="text-center py-4" *ngIf="!intermediateoutcomeindicatorgroups">
+      <h5>No Data</h5>
+    </div>
+    <!-- <div class="accordion accordion-flush mt-4" id="accordionFlushExample" *ngIf="intermediateoutcomeindicatorgroups">
+        <div class="accordion-item mb-3" *ngFor="let component of intermediateoutcomeindicatorgroups">
+          <h2 class="accordion-header px-3" [id]="'flush-headingOne'+component?.id"
+            (click)="sortByOutputs(component?.id)">
+            <button class="accordion-button collapsed ps-0" type="button" data-bs-toggle="collapse"
+              [attr.data-bs-target]="'#flush-collapseOne'+component?.id" aria-expanded="false"
+              [attr.aria-controls]="'flush-collapseOne'+component?.id">
+              {{component?.title}}
+            </button>
+          </h2>
+          <div [id]="'flush-collapseOne'+component?.id" class="accordion-collapse collapse py-4"
+            [attr.aria-labelledby]="'flush-headingOne'+component?.id" data-bs-parent="#accordionFlushExample">
+  
+  
+            <div class="d-flex justify-content-between px-3">
+              <h6 class="text-gre mb-0">List of Indicators</h6>
+            </div>
+            <div class="container-fluid">
+              <div class="d-flex justify-content-end">
+                <div class="d-flex flex-row">
+                  <button class="btn btn-outline-primary px-3 mx-2" (click)="openIOIItemModal()">Add Intermediate Outcome
+                    Indicator</button>
+                   <button class="btn btn-outline-primary px-3 mx-2" (click)="projectUpload()">Upload Projects</button>
+                        <a href="assets/file/Agile_Template.xlsx" class="btn btn-outline-primary px-3 mx-2">Download Template</a>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div> -->
+  </div>
+  <div id="content2" *ngIf="currentUserObj.roles[0].name == 'state'">
+    <div class="table-responsive p-3">
+      <div class="row sec-row">
+        <div class="col-12">
+
+          <div class="card container-fluid py-3">
+            <form [formGroup]="form" class="flex-column">
+              <div class="row">
+                <div class="col-lg-2 col-md-6">
+                  <div class="form-group">
+                    <label for="">Year</label>
+                    <select required formControlName="year" class="form-select">
+                      <option value="" selected>- Select Year -</option>
+                      <option [value]="item.id" *ngFor="let item of years">{{item.title}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                  <div class="form-group">
+                    <label for="">Quarter</label>
+                    <select required="" formControlName="quarter" name="quarter" class="form-select">
+                      <option value="" selected>- Select Quarter -</option>
+                      <option [value]="item.id" *ngFor="let item of quarters">{{item.title}}</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-lg-2 col-md-6">
+                  <div class="form-group">
+                    <label for="">Subcomponent</label>
+                    <select required="" (change)="getOIsbySubs()" formControlName="sub_component_id"
+                      name="sub_component_id" class="form-select">
+                      <option value="" selected></option>
+                      <option *ngFor="let item of subs" [value]="item.id">{{item.title}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                  <div class="form-group">
+                    <label for="">Select output indicator</label>
+                    <select name="outcome_indicator_id" formControlName="outcome_indicator_id" class="form-select">
+                      <option value="" selected></option>
+                      <option *ngFor="let item of intermediateoutcomeindicators" [value]="item.id">{{item.title}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+
+
+                <div class="col-2">
+                  <div class="form-group">
+                    <label for="">&nbsp;</label>
+                    <button class="btn btn-sm blue-btn px-3 my-0" (click)="getAllOutputValues()">Apply Filter</button>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+      <table class="table table-borderless" id="settingstable"
+        *ngIf="intermediateoutcomeindicatorgroupsresultunapproved">
+        <thead>
+          <tr>
+            <th class="text-gre">S/N</th>
+            <th class="text-gre">Year</th>
+            <th class="text-gre">Quarter</th>
+            <th width="40%" class="text-gre">Indicator</th>
+            <th class="text-gre">LGA</th>
+            <th class="text-gre">Actual Result</th>
+            <th class="text-gre">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of intermediateoutcomeindicatorgroupsresultunapproved; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ item?.year }}</td>
+            <td>{{ item?.quarter }}</td>
+            <td width="40%">{{ item?.title }}</td>
+            <td>{{ item?.lga }}</td>
+            <td>{{ item?.actual_result }}</td>
+            <td class="text-center">
+              <div class="btn-group ddl-actions" style="margin-right:10px">
+                <button type="button" class="btn-actions dropdown-toggle dropdown-toggle-split" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+                  <img src="assets/img/icons/more.svg" alt="" />
+                </button>
+
+                <div class="dropdown-menu">
+
+                  <a class="dropdown-item" *ngIf="item.is_editable=='0'" data-toggle="modal" data-target="#delEnableEdit"
+                    (click)="projectId = item.id">
+                    Enable Edit</a>
+                  <a class="dropdown-item" *ngIf="item.is_editable=='1'" data-toggle="modal" data-target="#delDisableEdit"
+                    (click)="projectId = item.id">
+                    Disable Edit</a>
+                  <a class="dropdown-item" (click)="editCommentsModal(item)">
+                    Comments</a>
+                </div>
+              </div>
+              <!-- <button class="btn btn-danger btn-xs btn-small  px-4" (click)="approveOIData(item); item.approved='1'" *ngIf="item.approved =='0'" type="submit">Unapproved</button>
+              <button class="btn btn-success btn-xs btn-small px-4" (click)="unapproveOIData(item);  item.approved='0'"   *ngIf="item.approved =='1'" type="submit">Approved</button>
+             -->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <pagination-controls *ngIf="false" (pageChange)="getUserByPage((page = $event))"></pagination-controls>
+    </div>
+    <div class="text-center py-4" *ngIf="!intermediateoutcomeindicatorgroups">
+      <h5>No Data</h5>
+    </div>
+
+  </div>
+</div>
+
+<div class="modal fade" id="delProjectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Delete Output Indicator</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure,You want to delete this item.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" id="closeDelProjectModal">
+          Close
+        </button>
+        <button type="button" class="btn btn-success" (click)="deleteProjectById()">
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="delProjectModall" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Delete Item</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure,You want to delete this item.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" id="closeDelProjectModal">
+          Close
+        </button>
+        <button type="button" class="btn btn-success" (click)="deleteProjectByIdd()">
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="delProjectModalll" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Approve Item</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure,You want to approve this item.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" id="closeDelProjectModal">
+          Close
+        </button>
+        <button type="button" class="btn btn-success" (click)="deleteProjectByIddd()">
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="delEnableEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Enable Edit Item</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure,You want to enable edit on this item.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" id="closeDelProjectModal">
+          Close
+        </button>
+        <button type="button" class="btn btn-success" (click)="enableProjectByIddd()">
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="delDisableEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Disable Edit Item</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure,You want to disable edit on this item.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" id="closeDelProjectModal">
+          Close
+        </button>
+        <button type="button" class="btn btn-success" (click)="disableProjectByIddd()">
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <app-sideview></app-sideview> -->
+<!-- <div class="side-view animated slideInRight" *ngIf="viewComments">
+  <button class="close" (click)="closeView()"><i class="fa fa-times"></i></button>
+  <div class="side-view-wrap">
+      <div class="content">
+        <app-sideview [item]="item"></app-sideview>
+      </div>
+  </div>
+</div> -->

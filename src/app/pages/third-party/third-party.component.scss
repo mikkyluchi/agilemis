@@ -1,0 +1,24 @@
+.form-control{
+    border: 1px solid #C4C4C4;
+    padding: 15px;
+    font-size: 16px;
+    background-color: transparent;
+    background: transparent;
+    
+    &:focus{
+        border: 1px solid #C4C4C4;
+        outline: none;
+        box-shadow: none;
+    }
+}
+
+.accordion-collapse{
+    box-shadow: 0px 4px 11px rgba(0, 0, 0, 0.04);
+    border-radius: 0px 0px 4px 4px;
+    background: transparent;
+}
+
+.project-list-card{
+    background: rgba(189, 211, 255, 0.24);
+    border-radius: 4px;
+}
